@@ -29,6 +29,8 @@ export default defineComponent({
 <style lang="stylus" scoped>
 .games
   padding: 50px 20px
+  max-width: 1000px
+  margin: auto
   .back
     display: inline-block
     margin-bottom: 20px

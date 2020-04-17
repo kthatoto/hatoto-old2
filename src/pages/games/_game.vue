@@ -1,9 +1,10 @@
 <template lang="pug">
 .game
-  nuxt-link.back(to="/games")
-    icon.icon.-r(name="chevron-left")
-    span back to games
-  h1 {{ gameName }}
+  .game__header
+    nuxt-link.back(to="/games")
+      icon.icon.-r(name="chevron-left")
+      span back to games
+    h1 {{ gameName }}
   .game__body(:is="gameName")
 </template>
 
@@ -33,6 +34,9 @@ export default defineComponent({
     margin-bottom: 20px
   h1
     margin-bottom: 10px
+  &__header
+    width: 500px
+    margin: auto
   &__body
     border: 1px solid #ccc
     margin: auto
