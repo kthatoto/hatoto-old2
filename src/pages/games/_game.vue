@@ -4,8 +4,7 @@
     icon.icon.-r(name="chevron-left")
     span back to games
   h1 {{ gameName }}
-  .game__screen
-    .game__body(:is="gameName")
+  .game__body(:is="gameName")
 </template>
 
 <script lang="ts">
@@ -32,7 +31,9 @@ export default defineComponent({
   .back
     display: inline-block
     margin-bottom: 20px
-  &__screen
+  h1
+    margin-bottom: 10px
+  &__body
     border: 1px solid #ccc
     margin: auto
 </style>

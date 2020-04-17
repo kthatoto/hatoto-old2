@@ -7,12 +7,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from '@vue/composition-api'
+import { defineComponent } from '@vue/composition-api'
 
 import { buildGameStore, GameItem } from '@/stores/game_store.ts'
 
 export default defineComponent({
-  setup (_, context) {
+  setup (_, _context) {
     const store = buildGameStore()
     const gameLink = (game: GameItem) => (`/games/${game.name}`)
     return {

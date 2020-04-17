@@ -1,5 +1,5 @@
 <template lang="pug">
-.othello
+.othello(:style="bodyStyle")
   h1 othellllllllllo!!!!
 </template>
 
@@ -10,10 +10,11 @@ import injectBy from '@/utils/injectBy.ts'
 import { gameStoreInjectionKey, GameItem } from '@/stores/game_store.ts'
 
 export default defineComponent({
-  setup (_, context) {
+  setup (_, _context) {
     const store = injectBy(gameStoreInjectionKey)
-    const game = store.findGame('othello')
+    const game: GameItem = store.findGame('othello')
     return {
+      bodyStyle: { width: game.width, height: game.height }
     }
   }
 })

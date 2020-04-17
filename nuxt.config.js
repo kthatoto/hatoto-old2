@@ -34,7 +34,7 @@ export default {
   },
   build: {
     transpile: [/^element-ui/],
-    extend (config, ctx) {
+    extend (_config, _ctx) {
     }
   }
 }
