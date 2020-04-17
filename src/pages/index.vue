@@ -4,9 +4,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from '@vue/composition-api'
+import { defineComponent } from '@vue/composition-api'
 
-import Title from '@/components/Title'
+import Title from '@/components/Title.vue'
 
 export default defineComponent({
   components: { Title },
