@@ -14,7 +14,7 @@ import { buildGameStore, gameStoreInjectionKey } from '@/stores/game_store.ts'
 
 export default defineComponent({
   components: {
-    othello: () => import('@/components/games/001_othello.vue')
+    othello: () => import('@/components/games/001/index.vue')
   },
   setup (_, context) {
     const store = buildGameStore()

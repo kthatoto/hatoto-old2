@@ -1,6 +1,5 @@
 <template lang="pug">
 .othello(:style="bodyStyle")
-  h1 othellllllllllo!!!!
 </template>
 
 <script lang="ts">
@@ -12,7 +11,9 @@ import { gameStoreInjectionKey, GameItem } from '@/stores/game_store.ts'
 export default defineComponent({
   setup (_, _context) {
     const store = injectBy(gameStoreInjectionKey)
-    const game: GameItem = store.findGame('othello')
+    const gameName: 'othello' = 'othello'
+    const game: GameItem | null = store.findGame(gameName)
+    if (game === null) throw `${gameName} is not found`
     return {
       bodyStyle: { width: game.width, height: game.height }
     }
@@ -22,6 +23,5 @@ export default defineComponent({
 
 <style lang="stylus" scoped>
 .othello
-  h1
-    color: red
+  background-color: #009a57
 </style>
