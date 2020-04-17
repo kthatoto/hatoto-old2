@@ -20,7 +20,8 @@ export default {
   ],
   plugins: [
     '@/plugins/element-ui',
-    '@/plugins/vue-composition-api'
+    '@/plugins/vue-composition-api',
+    '@/plugins/vue-awesome'
   ],
   buildModules: [
     '@nuxt/typescript-build'

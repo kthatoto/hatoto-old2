@@ -20,7 +20,8 @@
     "pug": "^2.0.4",
     "pug-plain-loader": "^1.0.0",
     "stylus": "^0.54.7",
-    "stylus-loader": "^3.0.2"
+    "stylus-loader": "^3.0.2",
+    "vue-awesome": "^4.0.2"
   },
   "devDependencies": {
     "@nuxt/typescript-build": "^0.6.0",
