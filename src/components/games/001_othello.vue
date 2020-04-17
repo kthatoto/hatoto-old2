@@ -12,10 +12,8 @@ import { gameStoreInjectionKey, GameItem } from '@/stores/game_store.ts'
 export default defineComponent({
   setup (_, context) {
     const store = injectBy(gameStoreInjectionKey)
-    const gameLink = (game: GameItem) => (`/games/${game.name}`)
+    const game = store.findGame('othello')
     return {
-      gameList: store.gameList,
-      gameLink
     }
   }
 })
