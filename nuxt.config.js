@@ -1,9 +1,7 @@
 
 export default {
   mode: 'spa',
-  /*
-  ** Headers of the page
-  */
+  srcDir: 'src',
   head: {
     title: process.env.npm_package_name || '',
     meta: [
@@ -15,51 +13,26 @@ export default {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
-  /*
-  ** Customize the progress-bar color
-  */
   loading: { color: '#fff' },
-  /*
-  ** Global CSS
-  */
   css: [
-    'element-ui/lib/theme-chalk/index.css'
+    'element-ui/lib/theme-chalk/index.css',
+    '~/styles/common.styl'
   ],
-  /*
-  ** Plugins to load before mounting the App
-  */
   plugins: [
-    '@/plugins/element-ui'
+    '@/plugins/element-ui',
+    '@/plugins/vue-composition-api'
   ],
-  /*
-  ** Nuxt.js dev-modules
-  */
   buildModules: [
     '@nuxt/typescript-build'
   ],
-  /*
-  ** Nuxt.js modules
-  */
   modules: [
-    // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv'
   ],
-  /*
-  ** Axios module configuration
-  ** See https://axios.nuxtjs.org/options
-  */
   axios: {
   },
-  /*
-  ** Build configuration
-  */
   build: {
     transpile: [/^element-ui/],
-    /*
-    ** You can extend webpack config here
-    */
     extend (config, ctx) {
     }
   }
