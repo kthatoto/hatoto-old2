@@ -1,7 +1,10 @@
 <template lang="pug">
 .games
+  nuxt-link.back(to="/")
+    icon.icon.-r(name="chevron-left")
+    span back to top
   .games__list
-    nuxt-link.games__item(v-for="(game, number) in ameList" :key="game.number" :to="gameLink(game)")
+    nuxt-link.games__item(v-for="(game, number) in gameList" :key="game.number" :to="gameLink(game)")
       .games__number {{ number }}
       .games__name {{ game.name }}
 </template>
@@ -25,13 +28,17 @@ export default defineComponent({
 
 <style lang="stylus" scoped>
 .games
-  itemHeight = 150px
+  padding: 50px 20px
+  .back
+    display: inline-block
+    margin-bottom: 20px
   &__list
-    width: 90%
+    width: 100%
     max-width: 1000px
     display: flex
     justify-content: space-between
-    margin: 50px auto 0
+    margin: 0 auto
+  itemHeight = 150px
   &__item
     width: 30%
     border: 1px solid #ccc
