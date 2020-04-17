@@ -1,20 +1,16 @@
 <template lang="pug">
 .index
-  Title
+  .index__internal
+    h1 hato.to
+    nuxt-link(to="/games") games
 </template>
 
-<script lang="ts">
-import { defineComponent } from '@vue/composition-api'
-
-import Title from '@/components/Title.vue'
-
-export default defineComponent({
-  components: { Title },
-  setup (_, context) {
-    return {}
-  }
-})
-</script>
-
 <style lang="stylus" scoped>
+.index
+  &__internal
+    width: 500px
+    margin: 20vh auto 0
+    font-family: "Courier New",Consolas,monospace
+  h1
+    font-size: 28px
 </style>
