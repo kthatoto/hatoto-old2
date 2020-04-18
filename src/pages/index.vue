@@ -18,4 +18,13 @@
     font-size: 24px
     &:hover
       text-decoration: underline
+
+@media (max-width: 540px)
+  .index
+    &__internal
+      width: 300px
+@media (max-width: 340px)
+  .index
+    &__internal
+      width: 260px
 </style>

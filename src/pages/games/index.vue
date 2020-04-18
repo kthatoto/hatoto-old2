@@ -29,7 +29,7 @@ export default defineComponent({
 <style lang="stylus" scoped>
 .games
   padding: 50px 20px
-  max-width: 1000px
+  max-width: 600px
   margin: auto
   .back
     display: inline-block
@@ -39,6 +39,7 @@ export default defineComponent({
     max-width: 1000px
     display: flex
     justify-content: space-between
+    flex-wrap: wrap
     margin: 0 auto
   itemHeight = 150px
   &__item
@@ -48,6 +49,7 @@ export default defineComponent({
     position: relative
     background-color: #eee
     cursor: pointer
+    margin-bottom: 30px
     &:hover .games__number
       visibility: visible
   &__number
@@ -69,4 +71,13 @@ export default defineComponent({
     bottom: 0
     padding: 5px
     font-weight: bold
+
+@media (max-width: 540px)
+  .games
+    max-width: 500px
+@media (max-width: 460px)
+  .games
+    max-width: 380px
+    &__item
+      width: 45%
 </style>

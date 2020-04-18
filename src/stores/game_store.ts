@@ -13,7 +13,13 @@ export interface GameItem {
 
 export const buildGameStore = () => {
   const gameList: GameList = {
-    '001': { numberKey: '001', name: 'othello', width: '500px', height: '500px' }
+    '001': { numberKey: '001', name: 'othello', width: '500px', height: '500px' },
+    '002': { numberKey: '001', name: 'othello', width: '500px', height: '500px' },
+    '003': { numberKey: '001', name: 'othello', width: '500px', height: '500px' },
+    '004': { numberKey: '001', name: 'othello', width: '500px', height: '500px' },
+    '005': { numberKey: '001', name: 'othello', width: '500px', height: '500px' },
+    '006': { numberKey: '001', name: 'othello', width: '500px', height: '500px' },
+    '007': { numberKey: '001', name: 'othello', width: '500px', height: '500px' }
   }
   const findGame = (gameName: string): GameItem => {
     const targetNumberKey: string | undefined = Object.keys(gameList).find((numberKey: string) => {
