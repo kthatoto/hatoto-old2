@@ -15,9 +15,7 @@ export default defineComponent({
   setup (_, _context) {
     const store = injectBy(storeInjectionKey)
     const putStone = (y: number, x: number) => {
-      if (store.boardSquares.value[y][x].status !== 'empty') {
-        return
-      }
+      if (store.boardSquares.value[y][x].status !== 'empty') return
       store.putStone(y, x)
     }
 

@@ -25,6 +25,11 @@ interface Values {
   stones: Square[]
 }
 
+interface StoneCounts {
+  black: number
+  white: number
+}
+
 const initBoardSquares: Square[][] = [...Array(8).keys()].reduce((rows: Square[][], y: number) => {
   const newRow = [...Array(8).keys()].reduce((row: Square[], x: number) => {
     if ((y === 3 && x === 3) || (y === 4 && x === 4)) {
@@ -86,9 +91,9 @@ const calculateSquareLines = (boardSquares: Square[][], square: Square): SquareL
   return squareLines
 }
 
-const calculateGettingStoneValues = (squareLines: SquareLines, boardSquares: Square[][], square: Square): Values => {
+const calculateGettingStoneValues = (squareLines: SquareLines, _boardSquares: Square[][], square: Square): Values => {
   const currentTurn: 'black' | 'white' | 'empty' = square.status
-  if (currentTurn === 'empty') throw 'the square must not be emtpy'
+  if (currentTurn === 'empty') throw new Error('the square must not be emtpy')
   const oppositeTurn: 'black' | 'white' = currentTurn === 'black' ? 'white' : 'black'
 
   const values: Values = {
@@ -96,10 +101,9 @@ const calculateGettingStoneValues = (squareLines: SquareLines, boardSquares: Squ
     stones: []
   }
 
-  Object.entries(squareLines).forEach(([key, line]) => {
+  Object.entries(squareLines).forEach(([_key, line]) => {
     const currentTurnIndex: number = line.findIndex((s: Square) => s.status === currentTurn)
     if (currentTurnIndex >= 1 && line.slice(0, currentTurnIndex).every((s: Square) => s.status === oppositeTurn)) {
-      console.log(key, currentTurnIndex, line)
       values.count += currentTurnIndex
       values.stones = values.stones.concat(line.slice(0, currentTurnIndex))
     }
@@ -130,9 +134,7 @@ export const buildStore = () => {
     }
 
     const squareLines: SquareLines = calculateSquareLines(tmpBoardSquares, square)
-    console.log(squareLines)
     const gettingStoneValues: Values = calculateGettingStoneValues(squareLines, tmpBoardSquares, square)
-    console.log(gettingStoneValues)
     if (gettingStoneValues.count > 0) {
       getStones(tmpBoardSquares, gettingStoneValues, square)
     } else {
@@ -142,10 +144,21 @@ export const buildStore = () => {
     boardSquares.value = tmpBoardSquares
   }
 
+  const stoneCounts = computed<StoneCounts>(() => {
+    return boardSquares.value.reduce((counts: StoneCounts, squareRow: Square[]) => {
+      squareRow.forEach((square: Square) => {
+        if (square.status === 'black') counts.black++
+        if (square.status === 'white') counts.white++
+      })
+      return counts
+    }, { black: 0, white: 0 })
+  })
+
   return {
     turn,
     boardSquares,
-    putStone
+    putStone,
+    stoneCounts
   }
 }
 

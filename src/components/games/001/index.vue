@@ -2,7 +2,7 @@
 .othello(:style="bodyStyle")
   .othello__header
     .othello__turn(:class="'-' + turn")
-      | {{ turn }}'s turn
+      | {{ turn }} turn
   Board
 </template>
 
