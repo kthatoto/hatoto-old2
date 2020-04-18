@@ -9,10 +9,10 @@
 <script lang="ts">
 import { defineComponent, provide } from '@vue/composition-api'
 
-import injectBy from '@/utils/injectBy.ts'
-import { gameStoreInjectionKey, GameItem } from '@/stores/game_store.ts'
 import { buildStore, storeInjectionKey } from './store'
 import Board from './board.vue'
+import injectBy from '@/utils/injectBy.ts'
+import { gameStoreInjectionKey, GameItem } from '@/stores/game_store.ts'
 
 export default defineComponent({
   components: { Board },

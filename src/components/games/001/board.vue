@@ -8,14 +8,16 @@
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api'
 
-import injectBy from '@/utils/injectBy.ts'
 import { storeInjectionKey } from './store'
+import injectBy from '@/utils/injectBy.ts'
 
 export default defineComponent({
-  setup(_, _context) {
+  setup (_, _context) {
     const store = injectBy(storeInjectionKey)
     const putStone = (y: number, x: number) => {
-      if (store.boardSquares.value[y][x].status !== 'empty') return
+      if (store.boardSquares.value[y][x].status !== 'empty') {
+        return
+      }
       store.putStone(y, x)
     }
 

@@ -26,7 +26,7 @@ export default defineComponent({
     provide(gameStoreInjectionKey, gameStore)
     const gameName: string = context.root.$route.params.game
     const game: GameItem = gameStore.findGame(gameName)
-    const changelog = ref<string>("")
+    const changelog = ref<string>('')
     const showingChangelog = ref<boolean>(false)
     const openChangelog = () => (showingChangelog.value = true)
     onMounted(async () => {
