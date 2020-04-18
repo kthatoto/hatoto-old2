@@ -1,6 +1,8 @@
 <template lang="pug">
 .othello(:style="bodyStyle")
   .othello__header
+    .othello__turn(:class="'-' + turn")
+      | {{ turn }}'s turn
   Board
 </template>
 
@@ -19,11 +21,10 @@ export default defineComponent({
     const store = buildStore()
     provide(storeInjectionKey, store)
 
-    const gameName: 'othello' = 'othello'
-    const game: GameItem | null = gameStore.findGame(gameName)
-    if (game === null) throw `${gameName} is not found`
+    const game: GameItem = gameStore.findGame('othello')
     return {
-      bodyStyle: { width: game.width, height: game.height }
+      bodyStyle: { width: game.width, height: game.height },
+      turn: store.turn
     }
   }
 })
@@ -33,5 +34,14 @@ export default defineComponent({
 .othello
   background-color: #009a57
   &__header
-    padding-top: 70px
+    height: 70px
+    padding: 20px 50px 0
+    display: flex
+  &__turn
+    font-weight: bold
+    font-size: 24px
+    &.-white
+      color: white
+    &.-black
+      color: black
 </style>

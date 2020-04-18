@@ -34,7 +34,11 @@ export default {
   },
   build: {
     transpile: [/^element-ui/],
-    extend (_config, _ctx) {
+    extend (config, _ctx) {
+      config.module.rules.push({
+        test: /\.txt$/,
+        loader: 'raw-loader'
+      })
     }
   }
 }

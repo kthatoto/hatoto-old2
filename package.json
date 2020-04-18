@@ -19,6 +19,7 @@
     "nuxt": "^2.0.0",
     "pug": "^2.0.4",
     "pug-plain-loader": "^1.0.0",
+    "raw-loader": "^4.0.1",
     "stylus": "^0.54.7",
     "stylus-loader": "^3.0.2",
     "vue-awesome": "^4.0.2"

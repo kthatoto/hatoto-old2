@@ -1,27 +1,43 @@
 <template lang="pug">
 .game
-  .game__header
+  .game__header(:style="{ width: game.width }")
     nuxt-link.back(to="/games")
       icon.icon.-r(name="chevron-left")
       span back to games
-    h1 {{ gameName }}
-  .game__body(:is="gameName")
+    h1
+      span {{ game.name }}
+      icon.icon.-large.-hover(name="list" @click.native="openChangelog")
+  .game__body(:is="game.name")
+  el-dialog(title="Changelog" :visible.sync="showingChangelog")
+    span {{ changelog }}
 </template>
 
 <script lang="ts">
-import { defineComponent, provide } from '@vue/composition-api'
+import { defineComponent, provide, ref, onMounted } from '@vue/composition-api'
 
-import { buildGameStore, gameStoreInjectionKey } from '@/stores/game_store.ts'
+import { buildGameStore, gameStoreInjectionKey, GameItem } from '@/stores/game_store.ts'
 
 export default defineComponent({
   components: {
     othello: () => import('@/components/games/001/index.vue')
   },
   setup (_, context) {
-    const store = buildGameStore()
-    provide(gameStoreInjectionKey, store)
+    const gameStore = buildGameStore()
+    provide(gameStoreInjectionKey, gameStore)
     const gameName: string = context.root.$route.params.game
-    return { gameName }
+    const game: GameItem = gameStore.findGame(gameName)
+    const changelog = ref<string>("")
+    const showingChangelog = ref<boolean>(false)
+    const openChangelog = () => (showingChangelog.value = true)
+    onMounted(async () => {
+      changelog.value = (await import(`@/assets/games/changelogs/${game.numberKey}.txt`)).default
+    })
+    return {
+      game,
+      changelog,
+      showingChangelog,
+      openChangelog
+    }
   }
 })
 </script>
@@ -34,10 +50,17 @@ export default defineComponent({
     margin-bottom: 20px
   h1
     margin-bottom: 10px
+    display: flex
+    justify-content: space-between
   &__header
-    width: 500px
     margin: auto
   &__body
     border: 1px solid #ccc
     margin: auto
+</style>
+
+<style lang="stylus">
+.el-dialog__body
+  span
+    white-space: pre-wrap
 </style>

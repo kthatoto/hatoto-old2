@@ -15,12 +15,12 @@ export const buildGameStore = () => {
   const gameList: GameList = {
     "001": { numberKey: "001", name: "othello", width: "500px", height: "500px" }
   }
-  const findGame = (gameName: string): GameItem | null => {
+  const findGame = (gameName: string): GameItem => {
     const targetNumberKey: string | undefined = Object.keys(gameList).find((numberKey: string) => {
       const game: GameItem = gameList[numberKey]
       return game.name === gameName
     })
-    if (targetNumberKey === undefined) return null
+    if (targetNumberKey === undefined) throw `${gameName} is not found`
     return gameList[targetNumberKey]
   }
 
