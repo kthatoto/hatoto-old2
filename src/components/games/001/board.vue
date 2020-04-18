@@ -1,8 +1,9 @@
 <template lang="pug">
 .board
   .squares-row(v-for="(squaresRow, i) in boardSquares" :key="i")
-    .square(v-for="(square, j) in squaresRow" :key="j" @click="putStone(i, j)")
+    .square(v-for="(square, j) in squaresRow" :key="j" @click="putStone(i, j)" :class="{'-puttable': square.puttable}")
       .stone(v-if="square.status !== 'empty'" :class="square.status")
+      .puttable(v-else-if="square.puttable")
 </template>
 
 <script lang="ts">
@@ -15,7 +16,8 @@ export default defineComponent({
   setup (_, _context) {
     const store = injectBy(storeInjectionKey)
     const putStone = (y: number, x: number) => {
-      if (store.boardSquares.value[y][x].status !== 'empty') return
+      const square = store.boardSquares.value[y][x]
+      if (square.status !== 'empty' || !square.puttable) return
       store.putStone(y, x)
     }
 
@@ -41,18 +43,28 @@ export default defineComponent({
     height: 50px
     border: 1px solid black
     position: relative
+    &.-puttable
+      cursor: pointer
+      &:hover
+        opacity: 0.8
+    > div
+      position: absolute
+      margin: auto
+      top: 0
+      left: 0
+      right: 0
+      bottom: 0
+      border-radius: 50%
   .stone
-    position: absolute
     width: 40px
     height: 40px
-    margin: auto
-    top: 0
-    left: 0
-    right: 0
-    bottom: 0
-    border-radius: 50%
     &.black
       background-color: black
     &.white
       background-color: white
+  .puttable
+    width: 10px
+    height: 10px
+    background-color: #d9534f
+    border-radius: 50%
 </style>

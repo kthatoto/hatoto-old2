@@ -91,8 +91,8 @@ const calculateSquareLines = (boardSquares: Square[][], square: Square): SquareL
   return squareLines
 }
 
-const calculateGettingStoneValues = (squareLines: SquareLines, _boardSquares: Square[][], square: Square): Values => {
-  const currentTurn: 'black' | 'white' | 'empty' = square.status
+const calculateGettingStoneValues = (squareLines: SquareLines, _boardSquares: Square[][], turn: 'black' | 'white' | 'empty'): Values => {
+  const currentTurn: 'black' | 'white' | 'empty' = turn
   if (currentTurn === 'empty') throw new Error('the square must not be emtpy')
   const oppositeTurn: 'black' | 'white' = currentTurn === 'black' ? 'white' : 'black'
 
@@ -112,9 +112,9 @@ const calculateGettingStoneValues = (squareLines: SquareLines, _boardSquares: Sq
   return values
 }
 
-const getStones = (boardSquares: Square[][], values: Values, square: Square): void => {
+const getStones = (boardSquares: Square[][], values: Values, turn: 'black' | 'white' | 'empty'): void => {
   values.stones.forEach((targetStone: Square) => {
-    boardSquares[targetStone.y][targetStone.x] = { y: targetStone.y, x: targetStone.x, status: square.status, puttable: false }
+    boardSquares[targetStone.y][targetStone.x] = { y: targetStone.y, x: targetStone.x, status: turn, puttable: false }
   })
 }
 
@@ -124,7 +124,38 @@ export const buildStore = () => {
   const turn = ref<'black' | 'white'>('black')
   const oppositeTurn = computed<'black' | 'white'>(() => turn.value === 'black' ? 'white' : 'black')
 
-  const putStone = (y: number, x: number) => {
+  const checkPuttable = (): void => {
+    const tmpBoardSquares = [...Array(8)].reduce((res: Square[][], _, y: number) => {
+      const squareRow = [...Array(8)].reduce((squareRow: Square[], _, x: number) => {
+        const square: Square = boardSquares.value[y][x]
+        let nearStone: boolean = false
+        if (y > 0 && boardSquares.value[y - 1][x].status !== 'empty') nearStone = true
+        if (y < 7 && boardSquares.value[y + 1][x].status !== 'empty') nearStone = true
+        if (x > 0 && boardSquares.value[y][x - 1].status !== 'empty') nearStone = true
+        if (x < 7 && boardSquares.value[y][x + 1].status !== 'empty') nearStone = true
+        if (square.status !== 'empty' || !nearStone) {
+          squareRow.push({ ...square, puttable: false })
+          return squareRow
+        }
+
+        const squareLines: SquareLines = calculateSquareLines(boardSquares.value, square)
+        const values: Values = calculateGettingStoneValues(squareLines, boardSquares.value, turn.value)
+        if (values.count > 0) {
+          squareRow.push({ ...square, puttable: true })
+          return squareRow
+        } else {
+          squareRow.push({ ...square, puttable: false })
+          return squareRow
+        }
+      }, [])
+      res.push(squareRow)
+      return res
+    }, [])
+    boardSquares.value = tmpBoardSquares
+  }
+  checkPuttable()
+
+  const putStone = (y: number, x: number): void => {
     const tmpBoardSquares = JSON.parse(JSON.stringify(boardSquares.value))
     const square: Square = { y, x, status: turn.value, puttable: false }
     if (tmpBoardSquares[y][x].status === 'empty') {
@@ -134,14 +165,15 @@ export const buildStore = () => {
     }
 
     const squareLines: SquareLines = calculateSquareLines(tmpBoardSquares, square)
-    const gettingStoneValues: Values = calculateGettingStoneValues(squareLines, tmpBoardSquares, square)
+    const gettingStoneValues: Values = calculateGettingStoneValues(squareLines, tmpBoardSquares, square.status)
     if (gettingStoneValues.count > 0) {
-      getStones(tmpBoardSquares, gettingStoneValues, square)
+      getStones(tmpBoardSquares, gettingStoneValues, square.status)
     } else {
       return
     }
     turn.value = oppositeTurn.value
     boardSquares.value = tmpBoardSquares
+    checkPuttable()
   }
 
   const stoneCounts = computed<StoneCounts>(() => {
