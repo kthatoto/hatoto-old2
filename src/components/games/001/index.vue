@@ -3,6 +3,11 @@
   .othello__header
     .othello__turn(:class="'-' + turn")
       | {{ turn }} turn
+    .othello__counts
+      span.-black {{ stoneCounts.black }}
+      span.-black -
+      span.-white -
+      span.-white {{ stoneCounts.white }}
   Board
 </template>
 
@@ -24,7 +29,8 @@ export default defineComponent({
     const game: GameItem = gameStore.findGame('othello')
     return {
       bodyStyle: { width: game.width, height: game.height },
-      turn: store.turn
+      turn: store.turn,
+      stoneCounts: store.stoneCounts
     }
   }
 })
@@ -33,15 +39,18 @@ export default defineComponent({
 <style lang="stylus" scoped>
 .othello
   background-color: #009a57
+  font-weight: bold
   &__header
     height: 70px
     padding: 20px 50px 0
     display: flex
   &__turn
-    font-weight: bold
     font-size: 24px
-    &.-white
-      color: white
-    &.-black
-      color: black
+    margin-right: 20px
+  &__counts
+    font-size: 24px
+  .-white
+    color: white
+  .-black
+    color: black
 </style>
