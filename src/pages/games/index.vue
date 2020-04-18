@@ -4,7 +4,8 @@
     icon.icon.-r(name="chevron-left")
     span back to top
   .games__list
-    nuxt-link.games__item(v-for="(game, number) in gameList" :key="game.number" :to="gameLink(game)")
+    nuxt-link.games__item(v-for="(game, number) in gameList" :key="game.number" :to="gameLink(game)"
+      :style="{ backgroundImage: `url(${gameThumbnail(game)})` }")
       .games__number {{ number }}
       .games__name {{ game.name }}
 </template>
@@ -18,9 +19,11 @@ export default defineComponent({
   setup (_, _context) {
     const store = buildGameStore()
     const gameLink = (game: GameItem) => (`/games/${game.name}`)
+    const gameThumbnail = (game: GameItem) => require(`@/assets/games/thumbnails/${game.thumbnail}`)
     return {
       gameList: store.gameList,
-      gameLink
+      gameLink,
+      gameThumbnail
     }
   }
 })
@@ -50,6 +53,8 @@ export default defineComponent({
     background-color: #eee
     cursor: pointer
     margin-bottom: 30px
+    background-repeat: no-repeat
+    background-size: 100% auto
     &:hover .games__number
       visibility: visible
   &__number
@@ -61,7 +66,7 @@ export default defineComponent({
     line-height: itemHeight
     margin: auto
     text-align: center
-    background-color: rgba(0, 0, 0, .5)
+    background-color: rgba(0, 0, 0, .4)
     color: white
     z-index: 1
   &__name
