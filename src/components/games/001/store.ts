@@ -1,26 +1,16 @@
 import { InjectionKey, ref, computed } from '@vue/composition-api'
 
-interface Square {
+import { calculateGettingStoneValues } from './calculator'
+import npclv1 from './npc/lv1'
+
+export interface Square {
   y: number
   x: number
   status: 'empty' | 'black' | 'white'
-  puttable: boolean
+  puttable?: boolean
 }
 
-interface SquareLines {
-  top: Square[]
-  topRight: Square[]
-  right: Square[]
-  bottomRight: Square[]
-  bottom: Square[]
-  bottomLeft: Square[]
-  left: Square[]
-  topLeft: Square[]
-}
-
-type LineKey = keyof SquareLines
-
-interface Values {
+export interface Values {
   count: number
   stones: Square[]
 }
@@ -30,14 +20,16 @@ interface StoneCounts {
   white: number
 }
 
+type Operating = 'you' | 'npclv1'
+
 const initBoardSquares: Square[][] = [...Array(8).keys()].reduce((rows: Square[][], y: number) => {
   const newRow = [...Array(8).keys()].reduce((row: Square[], x: number) => {
     if ((y === 3 && x === 3) || (y === 4 && x === 4)) {
-      row.push({ y, x, status: 'white', puttable: false })
+      row.push({ y, x, status: 'white' })
     } else if ((y === 3 && x === 4) || (y === 4 && x === 3)) {
-      row.push({ y, x, status: 'black', puttable: false })
+      row.push({ y, x, status: 'black' })
     } else {
-      row.push({ y, x, status: 'empty', puttable: false })
+      row.push({ y, x, status: 'empty' })
     }
     return row
   }, [])
@@ -45,76 +37,9 @@ const initBoardSquares: Square[][] = [...Array(8).keys()].reduce((rows: Square[]
   return rows
 }, [])
 
-const calculateSquareLines = (boardSquares: Square[][], square: Square): SquareLines => {
-  const squareLines: SquareLines = {
-    top: [],
-    topRight: [],
-    right: [],
-    bottomRight: [],
-    bottom: [],
-    bottomLeft: [],
-    left: [],
-    topLeft: []
-  }
-  squareLines.top = [...Array(square.y)].reduce((arr: Square[], _, i: number) => {
-    arr.push(boardSquares[square.y - i - 1][square.x])
-    return arr
-  }, [])
-  squareLines.topRight = [...Array(Math.min(square.y, 7 - square.x))].reduce((arr: Square[], _, i: number) => {
-    arr.push(boardSquares[square.y - i - 1][square.x + i + 1])
-    return arr
-  }, [])
-  squareLines.right = [...Array(7 - square.x)].reduce((arr: Square[], _, i: number) => {
-    arr.push(boardSquares[square.y][square.x + i + 1])
-    return arr
-  }, [])
-  squareLines.bottomRight = [...Array(Math.min(7 - square.y, 7 - square.x))].reduce((arr: Square[], _, i: number) => {
-    arr.push(boardSquares[square.y + i + 1][square.x + i + 1])
-    return arr
-  }, [])
-  squareLines.bottom = [...Array(7 - square.y)].reduce((arr: Square[], _, i: number) => {
-    arr.push(boardSquares[square.y + i + 1][square.x])
-    return arr
-  }, [])
-  squareLines.bottomLeft = [...Array(Math.min(7 - square.y, square.x))].reduce((arr: Square[], _, i: number) => {
-    arr.push(boardSquares[square.y + i + 1][square.x - i - 1])
-    return arr
-  }, [])
-  squareLines.left = [...Array(square.x)].reduce((arr: Square[], _, i: number) => {
-    arr.push(boardSquares[square.y][square.x - i - 1])
-    return arr
-  }, [])
-  squareLines.topLeft = [...Array(Math.min(square.y, square.x))].reduce((arr: Square[], _, i: number) => {
-    arr.push(boardSquares[square.y - i - 1][square.x - i - 1])
-    return arr
-  }, [])
-  return squareLines
-}
-
-const calculateGettingStoneValues = (squareLines: SquareLines, _boardSquares: Square[][], turn: 'black' | 'white' | 'empty'): Values => {
-  const currentTurn: 'black' | 'white' | 'empty' = turn
-  if (currentTurn === 'empty') throw new Error('the square must not be emtpy')
-  const oppositeTurn: 'black' | 'white' = currentTurn === 'black' ? 'white' : 'black'
-
-  const values: Values = {
-    count: 0,
-    stones: []
-  }
-
-  Object.entries(squareLines).forEach(([_key, line]) => {
-    const currentTurnIndex: number = line.findIndex((s: Square) => s.status === currentTurn)
-    if (currentTurnIndex >= 1 && line.slice(0, currentTurnIndex).every((s: Square) => s.status === oppositeTurn)) {
-      values.count += currentTurnIndex
-      values.stones = values.stones.concat(line.slice(0, currentTurnIndex))
-    }
-  })
-
-  return values
-}
-
 const getStones = (boardSquares: Square[][], values: Values, turn: 'black' | 'white' | 'empty'): void => {
   values.stones.forEach((targetStone: Square) => {
-    boardSquares[targetStone.y][targetStone.x] = { y: targetStone.y, x: targetStone.x, status: turn, puttable: false }
+    boardSquares[targetStone.y][targetStone.x] = { y: targetStone.y, x: targetStone.x, status: turn }
   })
 }
 
@@ -123,6 +48,20 @@ export const buildStore = () => {
 
   const turn = ref<'black' | 'white'>('black')
   const oppositeTurn = computed<'black' | 'white'>(() => turn.value === 'black' ? 'white' : 'black')
+
+  const blackOperating = ref<Operating>('you')
+  const whiteOperating = ref<Operating>('npclv1')
+  const getOperatingByTurn = (turn: 'black' | 'white'): Operating => {
+    if (turn === 'black') return blackOperating.value
+    if (turn === 'white') return whiteOperating.value
+    throw new Error('The turn is not found')
+  }
+  const getCurrentOperating = computed<Operating>(() => getOperatingByTurn(turn.value))
+  const changeOperating = (turn: 'black' | 'white', operating: Operating): void => {
+    if (turn === 'black') blackOperating.value = operating
+    if (turn === 'white') whiteOperating.value = operating
+  }
+  const isYourTurn = computed<boolean>(() => getCurrentOperating.value === 'you')
 
   const checkPuttable = (): void => {
     const tmpBoardSquares = [...Array(8)].reduce((res: Square[][], _, y: number) => {
@@ -138,8 +77,7 @@ export const buildStore = () => {
           return squareRow
         }
 
-        const squareLines: SquareLines = calculateSquareLines(boardSquares.value, square)
-        const values: Values = calculateGettingStoneValues(squareLines, boardSquares.value, turn.value)
+        const values: Values = calculateGettingStoneValues(boardSquares.value, { y: square.y, x: square.x, status: turn.value })
         if (values.count > 0) {
           squareRow.push({ ...square, puttable: true })
           return squareRow
@@ -157,15 +95,14 @@ export const buildStore = () => {
 
   const putStone = (y: number, x: number): void => {
     const tmpBoardSquares = JSON.parse(JSON.stringify(boardSquares.value))
-    const square: Square = { y, x, status: turn.value, puttable: false }
+    const square: Square = { y, x, status: turn.value }
     if (tmpBoardSquares[y][x].status === 'empty') {
       tmpBoardSquares[y][x] = square
     } else {
       return
     }
 
-    const squareLines: SquareLines = calculateSquareLines(tmpBoardSquares, square)
-    const gettingStoneValues: Values = calculateGettingStoneValues(squareLines, tmpBoardSquares, square.status)
+    const gettingStoneValues: Values = calculateGettingStoneValues(tmpBoardSquares, square)
     if (gettingStoneValues.count > 0) {
       getStones(tmpBoardSquares, gettingStoneValues, square.status)
     } else {
@@ -186,11 +123,23 @@ export const buildStore = () => {
     }, { black: 0, white: 0 })
   })
 
+  const clickAnywhere = (): void => {
+    if (!isYourTurn.value) {
+      const currentOperating: Operating = getCurrentOperating.value
+      if (currentOperating === 'npclv1') npclv1.operate(boardSquares.value, turn.value, putStone)
+    }
+  }
+
   return {
     turn,
+    blackOperating,
+    whiteOperating,
+    changeOperating,
     boardSquares,
     putStone,
-    stoneCounts
+    stoneCounts,
+    isYourTurn,
+    clickAnywhere
   }
 }
 

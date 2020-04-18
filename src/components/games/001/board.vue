@@ -1,15 +1,16 @@
 <template lang="pug">
 .board
-  .squares-row(v-for="(squaresRow, i) in boardSquares" :key="i")
-    .square(v-for="(square, j) in squaresRow" :key="j" @click="putStone(i, j)" :class="{'-puttable': square.puttable}")
-      .stone(v-if="square.status !== 'empty'" :class="square.status")
-      .puttable(v-else-if="square.puttable")
+  .squares-row(v-for="(squaresRow, y) in boardSquares" :key="y")
+    .square(v-for="(square, x) in squaresRow" :key="x")
+      .stone.-circle(v-if="square.status !== 'empty'" :class="square.status")
+      .puttable(v-else-if="puttable(square)" @click="putStone(y, x)" @click.stop)
+        .-circle
 </template>
 
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api'
 
-import { storeInjectionKey } from './store'
+import { storeInjectionKey, Square } from './store'
 import injectBy from '@/utils/injectBy.ts'
 
 export default defineComponent({
@@ -17,12 +18,15 @@ export default defineComponent({
     const store = injectBy(storeInjectionKey)
     const putStone = (y: number, x: number) => {
       const square = store.boardSquares.value[y][x]
-      if (square.status !== 'empty' || !square.puttable) return
+      if (!puttable(square)) return
       store.putStone(y, x)
     }
 
+    const puttable = (square: Square) => (square.puttable && store.isYourTurn.value)
+
     return {
       boardSquares: store.boardSquares,
+      puttable,
       putStone
     }
   }
@@ -43,11 +47,7 @@ export default defineComponent({
     height: 50px
     border: 1px solid black
     position: relative
-    &.-puttable
-      cursor: pointer
-      &:hover
-        opacity: 0.8
-    > div
+    .-circle
       position: absolute
       margin: auto
       top: 0
@@ -63,8 +63,14 @@ export default defineComponent({
     &.white
       background-color: white
   .puttable
-    width: 10px
-    height: 10px
-    background-color: #d9534f
-    border-radius: 50%
+    cursor: pointer
+    width: 100%
+    height: 100%
+    &:hover
+      opacity: 0.8
+    .-circle
+      width: 10px
+      height: 10px
+      background-color: #d9534f
+      border-radius: 50%
 </style>

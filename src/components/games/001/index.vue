@@ -1,13 +1,24 @@
 <template lang="pug">
 .othello
   .othello__header
-    .othello__turn(:class="'-' + turn")
-      | {{ turn }} turn
+    .othello__header-console
+      .othello__black
+        p black
+        el-select(size="mini" :value="blackOperating" @change="v => changeOperating('black', v)")
+          el-option(label="You" value="you")
+          el-option(label="NPC Lv1" value="npclv1")
+      .othello__white
+        p white
+        el-select(size="mini" :value="whiteOperating" @change="v => changeOperating('white', v)")
+          el-option(label="You" value="you")
+          el-option(label="NPC Lv1" value="npclv1")
     .othello__counts
       span.-black {{ stoneCounts.black }}
       span.-versus(data-inverted="-") -
       span.-white {{ stoneCounts.white }}
-  Board
+    .othello__turn
+      span(:class="'-' + turn") {{ turn }} turn
+  Board(@click.native="clickAnywhere")
 </template>
 
 <script lang="ts">
@@ -24,7 +35,11 @@ export default defineComponent({
 
     return {
       turn: store.turn,
-      stoneCounts: store.stoneCounts
+      stoneCounts: store.stoneCounts,
+      blackOperating: store.blackOperating,
+      whiteOperating: store.whiteOperating,
+      changeOperating: store.changeOperating,
+      clickAnywhere: store.clickAnywhere
     }
   }
 })
@@ -35,16 +50,33 @@ export default defineComponent({
   background-color: #009a57
   font-weight: bold
   &__header
-    height: 70px
-    padding: 20px 50px 0
+    height: 80px
+    padding: 15px 50px 0
     position: relative
-  .-white
-    color: white
-  .-black
+    &-console
+      display: flex
+      justify-content: space-between
+  &__black
+    font-size: 20px
+    text-align: left
     color: black
+  &__white
+    font-size: 20px
+    text-align: right
+    color: white
   &__turn
     font-size: 24px
-    margin-right: 20px
+    position: absolute
+    width: 150px
+    margin: auto
+    text-align: center
+    top: 40px
+    left: 0
+    right: 0
+    .-white
+      color: white
+    .-black
+      color: black
   &__counts
     font-size: 24px
     position: absolute
@@ -52,15 +84,17 @@ export default defineComponent({
     display: flex
     justify-content: center
     margin: auto
-    top: 20px
+    top: 15px
     left: 0
     right: 0
     .-white
       width: 30px
       text-align: left
+      color: white
     .-black
       width: 30px
       text-align: right
+      color: black
     .-versus
       width: 10px
       transform: scaleX(1.5)
@@ -75,4 +109,10 @@ export default defineComponent({
         top: 0
         width: 50%
         color: black
+</style>
+
+<style lang="stylus">
+.othello__header
+  .el-select
+    width: 100px
 </style>
