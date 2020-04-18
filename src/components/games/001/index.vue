@@ -5,8 +5,7 @@
       | {{ turn }} turn
     .othello__counts
       span.-black {{ stoneCounts.black }}
-      span.-black -
-      span.-white -
+      span.-versus(data-inverted="-") -
       span.-white {{ stoneCounts.white }}
   Board
 </template>
@@ -49,8 +48,21 @@ export default defineComponent({
     margin-right: 20px
   &__counts
     font-size: 24px
+    display: flex
   .-white
     color: white
   .-black
     color: black
+  .-versus
+    color: white
+    position: relative
+    margin: 0 2px
+    &:before
+      content: attr(data-inverted)
+      overflow: hidden
+      position: absolute
+      left: 0
+      top: 0
+      width: 50%
+      color: black
 </style>
