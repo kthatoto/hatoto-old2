@@ -143,7 +143,7 @@ export default defineComponent({
 <style lang="stylus">
 .othello__header
   .el-select
-    width: 100px
+    width: 120px
     .el-input
       font-size: 16px
 </style>
