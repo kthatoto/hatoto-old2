@@ -20,7 +20,7 @@ interface StoneCounts {
   white: number
 }
 
-type Operating = 'you' | 'npclv1'
+type Operating = 'player' | 'npclv1'
 
 const initBoardSquares: Square[][] = [...Array(8).keys()].reduce((rows: Square[][], y: number) => {
   const newRow = [...Array(8).keys()].reduce((row: Square[], x: number) => {
@@ -50,7 +50,7 @@ export const buildStore = () => {
   const oppositeTurn = computed<'black' | 'white'>(() => turn.value === 'black' ? 'white' : 'black')
   const finished = ref<boolean>(false)
 
-  const blackOperating = ref<Operating>('you')
+  const blackOperating = ref<Operating>('player')
   const whiteOperating = ref<Operating>('npclv1')
   const getOperatingByTurn = (turn: 'black' | 'white'): Operating => {
     if (turn === 'black') return blackOperating.value
@@ -62,7 +62,7 @@ export const buildStore = () => {
     if (turn === 'black') blackOperating.value = operating
     if (turn === 'white') whiteOperating.value = operating
   }
-  const isYourTurn = computed<boolean>(() => getCurrentOperating.value === 'you')
+  const playerTurn = computed<boolean>(() => getCurrentOperating.value === 'player')
 
   const checkPuttable = (): boolean => {
     let someSquarePuttable: boolean = false
@@ -146,7 +146,7 @@ export const buildStore = () => {
   })
 
   const clickAnywhere = (): void => {
-    if (!isYourTurn.value) {
+    if (!playerTurn.value) {
       const currentOperating: Operating = getCurrentOperating.value
       if (currentOperating === 'npclv1') npclv1.operate(boardSquares.value, turn.value, putStone)
     }
@@ -167,7 +167,7 @@ export const buildStore = () => {
     boardSquares,
     putStone,
     stoneCounts,
-    isYourTurn,
+    playerTurn,
     clickAnywhere,
     finished,
     winning,

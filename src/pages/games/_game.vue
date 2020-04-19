@@ -7,13 +7,19 @@
     h1
       span {{ game.name }}
       .buttons
-        icon.icon.-large.-hover.-r(name="question-circle" @click.native="openHowtoplay")
+        icon.icon.-large.-hover.-rr(name="question-circle" @click.native="openHowtoplay")
         icon.icon.-large.-hover(name="list" @click.native="openChangelog")
   .game__body(:is="game.name" :style="bodyStyle")
   el-dialog(title="Changelog" :visible.sync="showingChangelog")
-    vue-markdown.markdown {{ changelog }}
-  el-dialog(title="How To Play" :visible.sync="showingHowtoplay")
-    vue-markdown.markdown {{ howtoplay }}
+    vue-markdown.markdown(:source="changelog")
+  el-dialog(title="How To Play" :visible.sync="showingHowtoplay" custom-class="-howtoplay")
+    vue-markdown.markdown(:source="howtoplay")
+    .howtoplay-console(slot="footer")
+      el-button.prev-button(v-show="howtoplayPage > 1" @click="moveHowtoplayPage(-1)")
+        icon.icon(name="chevron-left")
+      .pagination {{ howtoplayPage }} / {{ howtoplayTotalPage }}
+      el-button.next-button(v-show="howtoplayPage < howtoplayTotalPage" @click="moveHowtoplayPage(1)")
+        icon.icon(name="chevron-right")
 </template>
 
 <script lang="ts">
@@ -30,6 +36,9 @@ export default defineComponent({
     const gameStore = buildGameStore()
     provide(gameStoreInjectionKey, gameStore)
 
+    const gameName: string = context.root.$route.params.game
+    const game: GameItem = gameStore.findGame(gameName)
+
     const changelog = ref<string>('')
     const showingChangelog = ref<boolean>(false)
     const openChangelog = (): void => { showingChangelog.value = true }
@@ -38,13 +47,15 @@ export default defineComponent({
     const showingHowtoplay = ref<boolean>(false)
     const howtoplayPage = ref<number>(1)
     const openHowtoplay = async () => {
-      showingHowtoplay.value = true
       howtoplayPage.value = 1
       howtoplay.value = (await import(`@/components/games/${game.numberKey}/assets/howtoplay/${howtoplayPage.value}.md`)).default
+      showingHowtoplay.value = true
     }
-
-    const gameName: string = context.root.$route.params.game
-    const game: GameItem = gameStore.findGame(gameName)
+    const howtoplayTotalPage: number = game.howtoplayTotalPage
+    const moveHowtoplayPage = async (diff: number) => {
+      howtoplayPage.value += diff
+      howtoplay.value = (await import(`@/components/games/${game.numberKey}/assets/howtoplay/${howtoplayPage.value}.md`)).default
+    }
 
     const bodyStyle = reactive<any>({
       width: game.width,
@@ -67,7 +78,10 @@ export default defineComponent({
       openChangelog,
       howtoplay,
       showingHowtoplay,
-      openHowtoplay
+      openHowtoplay,
+      howtoplayPage,
+      howtoplayTotalPage,
+      moveHowtoplayPage
     }
   }
 })
@@ -94,6 +108,35 @@ export default defineComponent({
     transform-origin: top left
   .markdown
     markdown()
+  .howtoplay-console
+    position: relative
+    height: 40px
+    width: 100%
+    left: 0
+    right: 0
+    .pagination
+      position: absolute
+      top: 0
+      left: 0
+      right: 0
+      bottom: 0
+      margin: auto
+      width: 50px
+      height: 20px
+      font-weight: bold
+      font-size: 16px
+      text-align: center
+    .prev-button, .next-button
+      width: 70px
+      height: 40px
+      position: absolute
+      margin: auto
+      top: 0
+      bottom: 0
+    .prev-button
+      left: 30px
+    .next-button
+      right: 30px
 </style>
 
 <style lang="stylus">
@@ -103,13 +146,18 @@ export default defineComponent({
   &__body
     scroll-shadow()
     padding: 10px 20px
-    height: 80%
+    height: calc(100% - 70px)
     overflow-y: scroll
     border-top: 1px solid #ccc
     border-bottom: 1px solid #ccc
+    word-break: break-word
   &__title
     font-weight: bold
     font-size: 20px
+  &.-howtoplay
+    .el-dialog__body
+      height: calc(100% - 120px)
+      position: relative
 
 @media (max-width: 540px)
   .el-dialog

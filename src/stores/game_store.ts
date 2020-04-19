@@ -10,12 +10,13 @@ export interface GameItem {
   width: string
   height: string
   thumbnail: string
+  howtoplayTotalPage: number
 }
 
 export const buildGameStore = () => {
   const gameList: GameList = {
-    '001': { numberKey: '001', width: '500px', height: '500px', thumbnail: '001.png', name: 'othello' },
-    '002': { numberKey: '002', width: '500px', height: '500px', thumbnail: '002.png', name: 'minesweeper' }
+    '001': { numberKey: '001', width: '500px', height: '500px', thumbnail: '001.png', howtoplayTotalPage: 2, name: 'othello' },
+    '002': { numberKey: '002', width: '500px', height: '500px', thumbnail: '002.png', howtoplayTotalPage: 1, name: 'minesweeper' }
   }
   const findGame = (gameName: string): GameItem => {
     const targetNumberKey: string | undefined = Object.keys(gameList).find((numberKey: string) => {

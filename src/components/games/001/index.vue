@@ -5,12 +5,12 @@
       .othello__black
         p black
         el-select(size="mini" :value="blackOperating" @change="v => changeOperating('black', v)")
-          el-option(label="You" value="you")
+          el-option(label="Player" value="player")
           el-option(label="NPC Lv1" value="npclv1")
       .othello__white
         p white
         el-select(size="mini" :value="whiteOperating" @change="v => changeOperating('white', v)")
-          el-option(label="You" value="you")
+          el-option(label="Player" value="player")
           el-option(label="NPC Lv1" value="npclv1")
     .othello__counts
       span.-black {{ stoneCounts.black }}

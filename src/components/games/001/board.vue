@@ -22,7 +22,7 @@ export default defineComponent({
       store.putStone(y, x)
     }
 
-    const puttable = (square: Square) => (square.puttable && store.isYourTurn.value)
+    const puttable = (square: Square) => (square.puttable && store.playerTurn.value)
 
     return {
       boardSquares: store.boardSquares,
