@@ -9,7 +9,7 @@
       icon.icon.-large.-hover(name="list" @click.native="openChangelog")
   .game__body(:is="game.name" :style="bodyStyle")
   el-dialog(title="Changelog" :visible.sync="showingChangelog")
-    span {{ changelog }}
+    vue-markdown {{ changelog }}
 </template>
 
 <script lang="ts">
@@ -38,7 +38,7 @@ export default defineComponent({
       transform: 'scale(1.0)'
     })
     onMounted(async () => {
-      changelog.value = (await import(`@/assets/games/changelogs/${game.numberKey}.txt`)).default
+      changelog.value = (await import(`@/components/games/${game.numberKey}/assets/changelog.md`)).default
       if (screen.width <= parseInt(bodyStyle.width) + 40) {
         const gameWidth: number = parseInt(bodyStyle.width)
         const availableWidth: number = screen.width - 40
@@ -79,10 +79,15 @@ export default defineComponent({
 
 <style lang="stylus">
 .el-dialog__body
-  span
-    white-space: pre-wrap
+  scroll-shadow()
+  padding: 10px 20px
+  height: 80%
+  overflow-y: scroll
+  border-top: 1px solid #ccc
+  border-bottom: 1px solid #ccc
 .el-dialog
   width: 500px
+  height: 50vh
 @media (max-width: 540px)
   .el-dialog
     width: 90%

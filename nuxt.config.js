@@ -1,3 +1,4 @@
+import { resolve } from 'path'
 
 export default {
   mode: 'spa',
@@ -32,7 +33,10 @@ export default {
   ],
   modules: [
     '@nuxtjs/axios',
-    '@nuxtjs/dotenv'
+    '@nuxtjs/dotenv',
+    ['nuxt-stylus-resources-loader', [
+      resolve(__dirname, 'src/styles/scroll-shadow.styl')
+    ]]
   ],
   axios: {
   },
