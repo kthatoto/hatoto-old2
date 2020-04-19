@@ -19,7 +19,8 @@ import { buildGameStore, gameStoreInjectionKey, GameItem } from '@/stores/game_s
 
 export default defineComponent({
   components: {
-    othello: () => import('@/components/games/001/index.vue')
+    othello: () => import('@/components/games/001/index.vue'),
+    minesweeper: () => import('@/components/games/002/index.vue')
   },
   setup (_, context) {
     const gameStore = buildGameStore()
