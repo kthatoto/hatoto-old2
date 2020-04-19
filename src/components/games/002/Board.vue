@@ -5,12 +5,14 @@
       digital-number(:number="9" :height="36")
       digital-number(:number="8" :height="36")
       digital-number(:number="7" :height="36")
-    .start-button
+    .start-button.-bulge(@click="startGame")
     .timer
       digital-number(:number="9" :height="36")
       digital-number(:number="8" :height="36")
       digital-number(:number="7" :height="36")
   .board__body.-dent
+    .square-row(v-for="(squareRow, y) in boardSquares" :key="y")
+      .square.-bulge(v-for="(square, x) in squareRow" :key="x")
 </template>
 
 <script lang="ts">
@@ -26,6 +28,8 @@ export default defineComponent({
     const store = injectBy(storeInjectionKey)
 
     return {
+      startGame: store.startGame,
+      boardSquares: store.boardSquares
     }
   }
 })
@@ -46,10 +50,11 @@ export default defineComponent({
   width: 400px
   height: 400px
   margin: auto
+  headerHeight = 40px
   &__header
     margin: 10px
     width: calc(100% - 20px)
-    height: 40px
+    height: headerHeight
     display: flex
     justify-content: space-between
   &__body
@@ -58,4 +63,15 @@ export default defineComponent({
     height: calc(100% - 72px)
   .mines-rest, .timer
     display: flex
+  .start-button
+    position: absolute
+    height: 'calc(%s - 4px)' % headerHeight
+    width: 'calc(%s - 4px)' % headerHeight
+    margin: auto
+    left: 0
+    right: 0
+  .square-row
+  .sqaure
+    width: 30px
+    height: 30px
 </style>

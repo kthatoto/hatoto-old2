@@ -10,8 +10,9 @@
 
 <script lang="ts">
 import { defineComponent, provide } from '@vue/composition-api'
+import { MessageBox } from 'element-ui'
 
-import { buildStore, storeInjectionKey } from './store'
+import { buildStore, storeInjectionKey, Difficulty } from './store'
 import Board from './Board.vue'
 
 export default defineComponent({
@@ -20,9 +21,25 @@ export default defineComponent({
     const store = buildStore()
     provide(storeInjectionKey, store)
 
+    const changeDifficulty = (difficulty: Difficulty) => {
+      MessageBox({
+        message: `Would you like to play a new game with <strong>${difficulty.toUpperCase()}</strong>?`,
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
+        showCancelButton: true,
+        dangerouslyUseHTMLString: true,
+        customClass: 'change-difficulty-confirm',
+        callback: res => {
+          if (res === 'confirm') {
+            store.changeDifficulty(difficulty)
+          }
+        }
+      })
+    }
+
     return {
       difficulty: store.difficulty,
-      changeDifficulty: store.changeDifficulty
+      changeDifficulty
     }
   }
 })
@@ -44,4 +61,8 @@ export default defineComponent({
     width: 120px
     .el-input
       font-size: 16px
+
+.change-difficulty-confirm
+  width: 90%
+  max-width: 500px
 </style>

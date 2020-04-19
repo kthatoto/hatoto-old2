@@ -1,7 +1,7 @@
 <template lang="pug">
 .board
-  .squares-row(v-for="(squaresRow, y) in boardSquares" :key="y")
-    .square(v-for="(square, x) in squaresRow" :key="x")
+  .square-row(v-for="(squareRow, y) in boardSquares" :key="y")
+    .square(v-for="(square, x) in squareRow" :key="x")
       .stone.-circle(v-if="square.status !== 'empty'" :class="square.status")
       .puttable(v-else-if="puttable(square)" @click="putStone(y, x)" @click.stop)
         .-circle
@@ -39,7 +39,7 @@ export default defineComponent({
   height: 400px
   border: 1px solid black
   margin: auto
-  .squares-row
+  .square-row
     width: 100%
     display: flex
   .square

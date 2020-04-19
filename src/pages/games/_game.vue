@@ -105,7 +105,7 @@ export default defineComponent({
     justify-content: space-between
   &__header
     margin: auto
-    max-width: calc(100%)
+    max-width: 100%
   &__body
     border: 1px solid #ccc
     margin: auto
