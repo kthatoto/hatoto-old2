@@ -36,8 +36,11 @@ export default defineComponent({
 
     const howtoplay = ref<string>('')
     const showingHowtoplay = ref<boolean>(false)
-    const openHowtoplay = (): void => {
+    const howtoplayPage = ref<number>(1)
+    const openHowtoplay = async () => {
       showingHowtoplay.value = true
+      howtoplayPage.value = 1
+      howtoplay.value = (await import(`@/components/games/${game.numberKey}/assets/howtoplay/${howtoplayPage.value}.md`)).default
     }
 
     const gameName: string = context.root.$route.params.game
