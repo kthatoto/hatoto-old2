@@ -1,19 +1,29 @@
 <template lang="pug">
 .index
   .index__internal
-    h1 hato.to
+    h1
+      span hato.to
+      img.favicon(src="@/assets/favicon.skelton.png")
     nuxt-link.link(to="/games") games
 </template>
 
 <style lang="stylus" scoped>
 .index
   &__internal
-    width: 500px
+    width: 400px
     margin: 20vh auto 0
     font-family: "Courier New",Consolas,monospace
   h1
     font-size: 28px
     margin-bottom: 20px
+    position: relative
+    .favicon
+      position: absolute
+      width: 30%
+      max-width: 120px
+      height: auto
+      right: 0
+      bottom: 0
   .link
     font-size: 24px
     &:hover
