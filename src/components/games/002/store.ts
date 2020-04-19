@@ -12,7 +12,10 @@ interface Square {
 
 export const buildStore = () => {
   const difficulty = ref<Difficulty>('easy')
-  const changeDifficulty = (newDifficulty: Difficulty) => { difficulty.value = newDifficulty }
+  const changeDifficulty = (newDifficulty: Difficulty) => {
+    difficulty.value = newDifficulty
+    startGame()
+  }
 
   const boardSquares = ref<Square[][]>([])
   const edgeSquareRowCount = computed<number>(() => {
@@ -37,11 +40,14 @@ export const buildStore = () => {
       return rows
     }, [])
   }
+  startGame()
 
   return {
     difficulty,
     changeDifficulty,
     boardSquares,
+    edgeSquareRowCount,
+    edgeSquareColumnCount,
     startGame
   }
 }

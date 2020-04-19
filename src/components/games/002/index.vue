@@ -29,7 +29,7 @@ export default defineComponent({
         showCancelButton: true,
         dangerouslyUseHTMLString: true,
         customClass: 'change-difficulty-confirm',
-        callback: res => {
+        callback: (res) => {
           if (res === 'confirm') {
             store.changeDifficulty(difficulty)
           }
@@ -50,8 +50,8 @@ export default defineComponent({
   background-color: #c0c0c0
   position: relative
   &__header
-    height: 70px
-    padding: 20px 25px 0
+    height: 50px
+    padding: 12px 35px 0
     position: relative
 </style>
 

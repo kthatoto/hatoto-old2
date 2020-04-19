@@ -12,11 +12,11 @@
       digital-number(:number="7" :height="36")
   .board__body.-dent
     .square-row(v-for="(squareRow, y) in boardSquares" :key="y")
-      .square.-bulge(v-for="(square, x) in squareRow" :key="x")
+      .square.-bulge(v-for="(square, x) in squareRow" :key="x" :style="squareStyle")
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent, onMounted, computed, ref } from '@vue/composition-api'
 
 import { storeInjectionKey } from './store'
 import DigitalNumber from './DigitalNumber.vue'
@@ -27,9 +27,31 @@ export default defineComponent({
   setup (_, _context) {
     const store = injectBy(storeInjectionKey)
 
+    const boardBodyWidth = ref<number>(0)
+    const boardBodyHeight = ref<number>(0)
+    const squareWidth = computed<string>(() => {
+      return `${boardBodyWidth.value / store.edgeSquareColumnCount.value}px`
+    })
+    const squareHeight = computed<string>(() => {
+      return `${boardBodyHeight.value / store.edgeSquareRowCount.value}px`
+    })
+    const squareStyle = computed<any>(() => {
+      return {
+        width: squareWidth.value,
+        height: squareHeight.value
+      }
+    })
+
+    onMounted(async () => {
+      const bodyElement = document.getElementsByClassName('board__body')[0]
+      boardBodyWidth.value = bodyElement.clientWidth
+      boardBodyHeight.value = bodyElement.clientHeight
+    })
+
     return {
       startGame: store.startGame,
-      boardSquares: store.boardSquares
+      boardSquares: store.boardSquares,
+      squareStyle
     }
   }
 })
@@ -47,8 +69,8 @@ export default defineComponent({
   border-right: 2px solid white
   border-bottom: 2px solid white
 .board
-  width: 400px
-  height: 400px
+  width: 378px
+  height: 430px
   margin: auto
   headerHeight = 40px
   &__header
@@ -61,6 +83,8 @@ export default defineComponent({
     margin: 10px
     width: calc(100% - 20px)
     height: calc(100% - 72px)
+    display: flex
+    flex-direction: column
   .mines-rest, .timer
     display: flex
   .start-button
@@ -71,7 +95,9 @@ export default defineComponent({
     left: 0
     right: 0
   .square-row
-  .sqaure
-    width: 30px
-    height: 30px
+    width: 100%
+    display: flex
+  .square
+    width: 100%
+    height: 100%
 </style>
