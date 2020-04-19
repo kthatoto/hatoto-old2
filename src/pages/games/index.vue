@@ -54,7 +54,8 @@ export default defineComponent({
     cursor: pointer
     margin-bottom: 30px
     background-repeat: no-repeat
-    background-size: 100% auto
+    background-size: cover
+    background-position: 50%
     &:hover .games__number
       visibility: visible
   &__number
