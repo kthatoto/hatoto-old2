@@ -144,4 +144,6 @@ export default defineComponent({
 .othello__header
   .el-select
     width: 100px
+    .el-input
+      font-size: 16px
 </style>
