@@ -13,6 +13,9 @@ export default {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
+  generate: {
+    fallback: true
+  },
   loading: { color: '#fff' },
   css: [
     'element-ui/lib/theme-chalk/index.css',
