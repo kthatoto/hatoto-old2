@@ -24,7 +24,8 @@ export default {
   plugins: [
     '@/plugins/element-ui',
     '@/plugins/vue-composition-api',
-    '@/plugins/vue-awesome'
+    '@/plugins/vue-awesome',
+    '@/plugins/vue-markdown'
   ],
   buildModules: [
     '@nuxt/typescript-build'
@@ -39,7 +40,7 @@ export default {
     transpile: [/^element-ui/],
     extend (config, _ctx) {
       config.module.rules.push({
-        test: /\.txt$/,
+        test: /\.md$/,
         loader: 'raw-loader'
       })
     }

@@ -22,7 +22,8 @@
     "raw-loader": "^4.0.1",
     "stylus": "^0.54.7",
     "stylus-loader": "^3.0.2",
-    "vue-awesome": "^4.0.2"
+    "vue-awesome": "^4.0.2",
+    "vue-markdown": "^2.2.4"
   },
   "devDependencies": {
     "@nuxt/typescript-build": "^0.6.0",
