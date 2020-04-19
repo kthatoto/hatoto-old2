@@ -40,19 +40,23 @@ export default defineComponent({
   &__list
     width: 100%
     max-width: 1000px
-    display: flex
-    justify-content: space-between
-    flex-wrap: wrap
     margin: 0 auto
+    display: flex
+    flex-wrap: wrap
+    justify-content: space-between
+    &::after
+      content: ''
+      display: block
+      width: 30%
   itemHeight = 150px
   &__item
     width: 30%
     border: 1px solid #ccc
     height: itemHeight
     position: relative
-    background-color: #eee
     cursor: pointer
     margin-bottom: 30px
+    background-color: #eee
     background-repeat: no-repeat
     background-size: cover
     background-position: 50%
