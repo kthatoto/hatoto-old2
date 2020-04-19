@@ -19,6 +19,12 @@
     .othello__turn
       span(:class="'-' + turn") {{ turn }} turn
   Board(@click.native="clickAnywhere")
+  .othello__finished(v-if="finished" @click="restart")
+    h2.othello__result
+      p.result
+        span(v-if="winning !== 'draw'") {{ winning }} won
+        span(v-else) draw
+      p click to restart
 </template>
 
 <script lang="ts">
@@ -39,7 +45,10 @@ export default defineComponent({
       blackOperating: store.blackOperating,
       whiteOperating: store.whiteOperating,
       changeOperating: store.changeOperating,
-      clickAnywhere: store.clickAnywhere
+      clickAnywhere: store.clickAnywhere,
+      finished: store.finished,
+      winning: store.winning,
+      restart: store.restart
     }
   }
 })
@@ -49,6 +58,7 @@ export default defineComponent({
 .othello
   background-color: #009a57
   font-weight: bold
+  position: relative
   &__header
     height: 80px
     padding: 15px 50px 0
@@ -109,6 +119,25 @@ export default defineComponent({
         top: 0
         width: 50%
         color: black
+  &__finished
+    position: absolute
+    top: 0
+    left: 0
+    right: 0
+    bottom: 0
+    width: 100%
+    height: 100%
+    background-color: rgba(0, 0, 0, 0.4)
+    cursor: pointer
+  &__result
+    position: absolute
+    width: 100%
+    text-align: center
+    padding-top: 200px
+    font-size: 32px
+    color: white
+    .result
+      font-size: 48px
 </style>
 
 <style lang="stylus">

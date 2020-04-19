@@ -48,6 +48,7 @@ export const buildStore = () => {
 
   const turn = ref<'black' | 'white'>('black')
   const oppositeTurn = computed<'black' | 'white'>(() => turn.value === 'black' ? 'white' : 'black')
+  const finished = ref<boolean>(false)
 
   const blackOperating = ref<Operating>('you')
   const whiteOperating = ref<Operating>('npclv1')
@@ -63,7 +64,8 @@ export const buildStore = () => {
   }
   const isYourTurn = computed<boolean>(() => getCurrentOperating.value === 'you')
 
-  const checkPuttable = (): void => {
+  const checkPuttable = (): boolean => {
+    let someSquarePuttable: boolean = false
     const tmpBoardSquares = [...Array(8)].reduce((res: Square[][], _, y: number) => {
       const squareRow = [...Array(8)].reduce((squareRow: Square[], _, x: number) => {
         const square: Square = boardSquares.value[y][x]
@@ -79,6 +81,7 @@ export const buildStore = () => {
 
         const values: Values = calculateGettingStoneValues(boardSquares.value, { y: square.y, x: square.x, status: turn.value })
         if (values.count > 0) {
+          someSquarePuttable = true
           squareRow.push({ ...square, puttable: true })
           return squareRow
         } else {
@@ -90,6 +93,7 @@ export const buildStore = () => {
       return res
     }, [])
     boardSquares.value = tmpBoardSquares
+    return someSquarePuttable
   }
   checkPuttable()
 
@@ -110,7 +114,14 @@ export const buildStore = () => {
     }
     turn.value = oppositeTurn.value
     boardSquares.value = tmpBoardSquares
-    checkPuttable()
+    const somePuttable: boolean = checkPuttable()
+    if (!somePuttable) {
+      turn.value = oppositeTurn.value
+      const oppositeSomePuttable: boolean = checkPuttable()
+      if (!oppositeSomePuttable) {
+        finished.value = true
+      }
+    }
   }
 
   const stoneCounts = computed<StoneCounts>(() => {
@@ -122,12 +133,30 @@ export const buildStore = () => {
       return counts
     }, { black: 0, white: 0 })
   })
+  const winning = computed<'black' | 'white' | 'draw'>(() => {
+    const blackCount: number = stoneCounts.value.black
+    const whiteCount: number = stoneCounts.value.white
+    if (blackCount > whiteCount) {
+      return 'black'
+    } else if (whiteCount > blackCount) {
+      return 'white'
+    } else {
+      return 'draw'
+    }
+  })
 
   const clickAnywhere = (): void => {
     if (!isYourTurn.value) {
       const currentOperating: Operating = getCurrentOperating.value
       if (currentOperating === 'npclv1') npclv1.operate(boardSquares.value, turn.value, putStone)
     }
+  }
+
+  const restart = (): void => {
+    boardSquares.value = initBoardSquares
+    turn.value = 'black'
+    finished.value = false
+    checkPuttable()
   }
 
   return {
@@ -139,7 +168,10 @@ export const buildStore = () => {
     putStone,
     stoneCounts,
     isYourTurn,
-    clickAnywhere
+    clickAnywhere,
+    finished,
+    winning,
+    restart
   }
 }
 
