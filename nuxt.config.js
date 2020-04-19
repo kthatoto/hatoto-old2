@@ -35,7 +35,8 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/dotenv',
     ['nuxt-stylus-resources-loader', [
-      resolve(__dirname, 'src/styles/scroll-shadow.styl')
+      resolve(__dirname, 'src/styles/scroll-shadow.styl'),
+      resolve(__dirname, 'src/styles/markdown.styl')
     ]]
   ],
   axios: {

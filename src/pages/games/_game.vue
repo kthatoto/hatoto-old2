@@ -6,10 +6,14 @@
       span back to games
     h1
       span {{ game.name }}
-      icon.icon.-large.-hover(name="list" @click.native="openChangelog")
+      .buttons
+        icon.icon.-large.-hover.-r(name="question-circle" @click.native="openHowtoplay")
+        icon.icon.-large.-hover(name="list" @click.native="openChangelog")
   .game__body(:is="game.name" :style="bodyStyle")
   el-dialog(title="Changelog" :visible.sync="showingChangelog")
-    vue-markdown {{ changelog }}
+    vue-markdown.markdown {{ changelog }}
+  el-dialog(title="How To Play" :visible.sync="showingHowtoplay")
+    vue-markdown.markdown {{ howtoplay }}
 </template>
 
 <script lang="ts">
@@ -25,9 +29,16 @@ export default defineComponent({
   setup (_, context) {
     const gameStore = buildGameStore()
     provide(gameStoreInjectionKey, gameStore)
+
     const changelog = ref<string>('')
     const showingChangelog = ref<boolean>(false)
-    const openChangelog = () => (showingChangelog.value = true)
+    const openChangelog = (): void => { showingChangelog.value = true }
+
+    const howtoplay = ref<string>('')
+    const showingHowtoplay = ref<boolean>(false)
+    const openHowtoplay = (): void => {
+      showingHowtoplay.value = true
+    }
 
     const gameName: string = context.root.$route.params.game
     const game: GameItem = gameStore.findGame(gameName)
@@ -50,7 +61,10 @@ export default defineComponent({
       bodyStyle,
       changelog,
       showingChangelog,
-      openChangelog
+      openChangelog,
+      howtoplay,
+      showingHowtoplay,
+      openHowtoplay
     }
   }
 })
@@ -75,19 +89,25 @@ export default defineComponent({
     border: 1px solid #ccc
     margin: auto
     transform-origin: top left
+  .markdown
+    markdown()
 </style>
 
 <style lang="stylus">
-.el-dialog__body
-  scroll-shadow()
-  padding: 10px 20px
-  height: 80%
-  overflow-y: scroll
-  border-top: 1px solid #ccc
-  border-bottom: 1px solid #ccc
 .el-dialog
   width: 500px
   height: 50vh
+  &__body
+    scroll-shadow()
+    padding: 10px 20px
+    height: 80%
+    overflow-y: scroll
+    border-top: 1px solid #ccc
+    border-bottom: 1px solid #ccc
+  &__title
+    font-weight: bold
+    font-size: 20px
+
 @media (max-width: 540px)
   .el-dialog
     width: 90%
