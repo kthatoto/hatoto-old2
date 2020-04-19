@@ -1,7 +1,14 @@
-import { InjectionKey } from '@vue/composition-api'
+import { InjectionKey, ref } from '@vue/composition-api'
+
+type Difficulty = 'easy' | 'normal' | 'difficult'
 
 export const buildStore = () => {
+  const difficulty = ref<Difficulty>('easy')
+  const changeDifficulty = (newDifficulty: Difficulty) => { difficulty.value = newDifficulty }
+
   return {
+    difficulty,
+    changeDifficulty
   }
 }
 

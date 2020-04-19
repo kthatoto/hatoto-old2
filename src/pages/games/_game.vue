@@ -144,28 +144,30 @@ export default defineComponent({
 </style>
 
 <style lang="stylus">
-.el-dialog
-  width: 500px
-  height: 50vh
-  &__body
-    scroll-shadow()
-    padding: 10px 20px
-    height: calc(100% - 70px)
-    overflow-y: scroll
-    border-top: 1px solid #ccc
-    border-bottom: 1px solid #ccc
-    word-break: break-word
-  &__title
-    font-weight: bold
-    font-size: 20px
-  &.-howtoplay
-    .el-dialog__body
-      height: calc(100% - 120px)
-      position: relative
+.game
+  .el-dialog
+    width: 500px
+    height: 50vh
+    &__body
+      scroll-shadow()
+      padding: 10px 20px
+      height: calc(100% - 70px)
+      overflow-y: scroll
+      border-top: 1px solid #ccc
+      border-bottom: 1px solid #ccc
+      word-break: break-word
+    &__title
+      font-weight: bold
+      font-size: 20px
+    &.-howtoplay
+      .el-dialog__body
+        height: calc(100% - 120px)
+        position: relative
 
 @media (max-width: 540px)
-  .el-dialog
-    width: 90%
-    &__wrapper
-      width: 100vw
+  .game
+    .el-dialog
+      width: 90%
+      &__wrapper
+        width: 100vw
 </style>
