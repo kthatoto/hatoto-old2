@@ -176,4 +176,4 @@ export const buildStore = () => {
 }
 
 export type Store = ReturnType<typeof buildStore>
-export const storeInjectionKey: InjectionKey<Store> = Symbol('store')
+export const storeInjectionKey: InjectionKey<Store> = Symbol('games_001_store')

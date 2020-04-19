@@ -31,7 +31,7 @@
 import { defineComponent, provide } from '@vue/composition-api'
 
 import { buildStore, storeInjectionKey } from './store'
-import Board from './board.vue'
+import Board from './Board.vue'
 
 export default defineComponent({
   components: { Board },
