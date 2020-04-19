@@ -64,10 +64,13 @@ export default defineComponent({
     })
     onMounted(async () => {
       changelog.value = (await import(`@/components/games/${game.numberKey}/assets/changelog.md`)).default
-      if (screen.width <= parseInt(bodyStyle.width) + 40) {
-        const gameWidth: number = parseInt(bodyStyle.width)
-        const availableWidth: number = screen.width - 40
-        bodyStyle.transform = `scale(${availableWidth / gameWidth})`
+      const gameWidth: number = parseInt(bodyStyle.width)
+      const sidePadding: number = 20
+      if (gameWidth <= screen.width && screen.width <= gameWidth + sidePadding * 2) {
+        const translateXToLeft: number = sidePadding + (gameWidth - screen.width) / 2
+        bodyStyle.transform = `translateX(-${translateXToLeft}px)`
+      } else if (screen.width < gameWidth) {
+        bodyStyle.transform = `translateX(-${sidePadding}px) scale(${screen.width / gameWidth})`
       }
     })
     return {
@@ -89,7 +92,8 @@ export default defineComponent({
 
 <style lang="stylus" scoped>
 .game
-  padding: 50px 20px 0
+  sidePadding = 20px
+  padding: 50px sidePadding 0
   max-height: 90vh
   overflow: hidden
   .back
