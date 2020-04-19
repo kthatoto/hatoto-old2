@@ -78,6 +78,8 @@ export default defineComponent({
 .el-dialog__body
   span
     white-space: pre-wrap
+.el-dialog
+  width: 500px
 @media (max-width: 540px)
   .el-dialog
     width: 90%
