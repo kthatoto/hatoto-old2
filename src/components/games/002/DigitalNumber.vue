@@ -91,7 +91,7 @@ export default defineComponent({
         &.-bottomLeft
           transform: translate(-60%, 900%) rotate(155deg)
         &.-bottomRight
-          transform: translate(20%, 900%) rotate(25deg)
+          transform: translate(20%, 850%) rotate(25deg)
     &.bottom
       border-radius: 0 0 10% 10%
       border-top-width: 2px
@@ -99,7 +99,7 @@ export default defineComponent({
         &.-topLeft
           transform: translate(-60%, -120%) rotate(25deg)
         &.-topRight
-          transform: translate(20%, -120%) rotate(155deg)
+          transform: translate(20%, -90%) rotate(155deg)
         &.-bottomLeft
           transform: translate(-60%, 900%) rotate(135deg)
         &.-bottomRight
