@@ -58,7 +58,7 @@ export default defineComponent({
 <style lang="stylus" scoped>
 .game
   padding: 50px 20px 0
-  max-height: 100vh
+  max-height: 90vh
   overflow: hidden
   .back
     display: inline-block
