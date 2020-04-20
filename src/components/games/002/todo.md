@@ -6,6 +6,6 @@
 - [ ] number image
 - [x] mine image
 - [ ] 難易度調整
-- [ ] beforePlayの時の難易度変更を確認なしにする
+- [x] beforePlayの時の難易度変更を確認なしにする
 - [x] 最後自動でflag立てる
 - [ ] 説明書く

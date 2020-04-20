@@ -22,6 +22,8 @@ export default defineComponent({
     provide(storeInjectionKey, store)
 
     const changeDifficulty = (difficulty: Difficulty) => {
+      const call = () => { store.changeDifficulty(difficulty) }
+      if (store.gameStatus.value === 'beforePlay') return call()
       MessageBox({
         message: `Would you like to play a new game with <strong>${difficulty.toUpperCase()}</strong>?`,
         confirmButtonText: 'OK',
@@ -30,9 +32,7 @@ export default defineComponent({
         dangerouslyUseHTMLString: true,
         customClass: 'change-difficulty-confirm',
         callback: (res) => {
-          if (res === 'confirm') {
-            store.changeDifficulty(difficulty)
-          }
+          if (res === 'confirm') call()
         }
       })
     }

@@ -49,7 +49,7 @@ export const buildStore = () => {
     return 0
   })
   const mineNumber = computed<number>(() => {
-    if (difficulty.value === 'easy') return 2
+    if (difficulty.value === 'easy') return 10
     if (difficulty.value === 'normal') return 30
     if (difficulty.value === 'difficult') return 70
     return 0
@@ -198,6 +198,7 @@ export const buildStore = () => {
     switch (newStatus) {
       case 'beforePlay':
         timer.count = 0
+        clearInterval(timer.id)
         break
       case 'playing':
         timer.id = window.setInterval(() => { timer.count++ }, 1000)
