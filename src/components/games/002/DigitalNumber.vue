@@ -16,13 +16,13 @@
 import { defineComponent, computed } from '@vue/composition-api'
 
 interface Props {
-  number: number
+  number: number | '-'
   height: number
 }
 
 export default defineComponent({
   props: {
-    number: { type: Number, require: true },
+    number: { type: [Number, String], require: true },
     height: { type: Number, require: true }
   },
   setup (props: Props, _context) {
@@ -40,6 +40,7 @@ export default defineComponent({
       if (props.number === 7) return ['-top', '-right']
       if (props.number === 8) return ['-top', '-right', '-left', '-bottom']
       if (props.number === 9) return ['-top', '-right', '-left', '-bottom']
+      if (props.number === '-') return ['-bottom']
       throw new Error('number must be 1 digit')
     })
     const bottomClass = computed<any>(() => {
@@ -53,6 +54,7 @@ export default defineComponent({
       if (props.number === 7) return ['-right']
       if (props.number === 8) return ['-top', '-right', '-left', '-bottom']
       if (props.number === 9) return ['-top', '-right', '-bottom']
+      if (props.number === '-') return ['-top']
       throw new Error('number must be 1 digit')
     })
     return {
