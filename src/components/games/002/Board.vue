@@ -14,7 +14,8 @@
     .square-row(v-for="(squareRow, y) in boardSquares" :key="y")
       .square(v-for="(square, x) in squareRow" :key="x" :style="squareStyle" :class="squareClass(square)"
         @click.left="pushSquare(y, x)" @click.right.prevent="putFlag(y, x)")
-        .number(v-if="opening(square) && square.nearMineNumber > 0") {{ square.nearMineNumber }}
+        .number(v-if="opening(square) && square.nearMineNumber > 0" :class="'-color' + square.nearMineNumber" :style="numberStyle")
+          | {{ square.nearMineNumber }}
 </template>
 
 <script lang="ts">
@@ -47,6 +48,13 @@ export default defineComponent({
       return {
         width: squareWidth.value,
         height: squareHeight.value
+      }
+    })
+    const numberStyle = computed<any>(() => {
+      console.log(squareStyle.value.width)
+      return {
+        fontSize: `${(parseInt(squareStyle.value.width) * 0.8)}px`,
+        lineHeight: squareHeight.value
       }
     })
     const squareClass = (square: Square): string | string[] => {
@@ -98,6 +106,7 @@ export default defineComponent({
       pushSquare: store.pushSquare,
       putFlag: store.putFlag,
       squareStyle,
+      numberStyle,
       squareClass,
       smileyClass,
       opening,
@@ -182,6 +191,24 @@ export default defineComponent({
       background-image: url('~assets/games/002/flag.png')
     .number
       centering()
+      monospaced-font()
+      font-weight: bold
       vertical-align: middle
       text-align: center
+      &.-color1
+        color: blue
+      &.-color2
+        color: green
+      &.-color3
+        color: red
+      &.-color4
+        color: purple
+      &.-color5
+        color: black
+      &.-color6
+        color: maroon
+      &.-color7
+        color: gray
+      &.-color8
+        color: turquoise
 </style>

@@ -12,7 +12,7 @@
   &__internal
     width: 400px
     margin: 20vh auto 0
-    font-family: "Courier New",Consolas,monospace
+    monospaced-font()
   h1
     font-size: 28px
     margin-bottom: 20px

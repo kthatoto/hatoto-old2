@@ -23,7 +23,7 @@ export default defineComponent({
 
     const changeDifficulty = (difficulty: Difficulty) => {
       const call = () => { store.changeDifficulty(difficulty) }
-      if (store.gameStatus.value === 'beforePlay') return call()
+      if (store.gameStatus.value !== 'playing') return call()
       MessageBox({
         message: `Would you like to play a new game with <strong>${difficulty.toUpperCase()}</strong>?`,
         confirmButtonText: 'OK',

@@ -51,7 +51,7 @@ export const buildStore = () => {
   const mineNumber = computed<number>(() => {
     if (difficulty.value === 'easy') return 10
     if (difficulty.value === 'normal') return 30
-    if (difficulty.value === 'difficult') return 70
+    if (difficulty.value === 'difficult') return 50
     return 0
   })
   const startGame = () => {
