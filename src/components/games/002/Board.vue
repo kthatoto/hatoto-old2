@@ -46,7 +46,8 @@ export default defineComponent({
     })
     const squareClass = (square: Square): string | string[] => {
       if (opening(square)) return '-opened'
-      if (store.gameStatus.value === 'gameover') return ['-bulge', '-gameover']
+      const gameStatus = store.gameStatus.value
+      if (gameStatus === 'gameover' || gameStatus === 'clear') return ['-bulge', '-without-react']
       return '-bulge'
     }
 
@@ -136,7 +137,7 @@ export default defineComponent({
     width: 100%
     height: 100%
     position: relative
-    &.-bulge:not(.-gameover)
+    &.-bulge:not(.-without-react)
       hover(.5)
     &.-opened
       border: 0.1px solid #707070
