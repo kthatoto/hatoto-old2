@@ -13,9 +13,7 @@
   .board__body.-dent
     .square-row(v-for="(squareRow, y) in boardSquares" :key="y")
       .square(v-for="(square, x) in squareRow" :key="x" :style="squareStyle" :class="squareClass(square)" @click="pushSquare(y, x)")
-        template(v-if="opening(square)")
-          .mine(v-if="square.mine")
-          .number(v-else-if="square.nearMineNumber > 0") {{ square.nearMineNumber }}
+        .number(v-if="opening(square) && square.nearMineNumber > 0") {{ square.nearMineNumber }}
 </template>
 
 <script lang="ts">
@@ -45,7 +43,7 @@ export default defineComponent({
       }
     })
     const squareClass = (square: Square): string | string[] => {
-      if (opening(square)) return '-opened'
+      if (opening(square)) return square.mine ? ['-opened', '-mine'] : '-opened'
       const gameStatus = store.gameStatus.value
       if (gameStatus === 'gameover' || gameStatus === 'clear') return ['-bulge', '-without-react']
       return '-bulge'
@@ -141,12 +139,12 @@ export default defineComponent({
       hover(.5)
     &.-opened
       border: 0.1px solid #707070
-    .mine
-      centering()
-      width: 90%
-      height: 90%
-      background-color: black
-      border-radius: 50%
+    &.-mine
+      background-color: red
+      background-size: 80%
+      background-position: center
+      background-repeat: no-repeat
+      background-image: url('~assets/games/002/mine.png')
     .number
       centering()
       vertical-align: middle
