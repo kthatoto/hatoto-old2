@@ -12,7 +12,8 @@
       digital-number(:number="timer.firstDigit" :height="36")
   .board__body.-dent
     .square-row(v-for="(squareRow, y) in boardSquares" :key="y")
-      .square(v-for="(square, x) in squareRow" :key="x" :style="squareStyle" :class="squareClass(square)" @click="pushSquare(y, x)")
+      .square(v-for="(square, x) in squareRow" :key="x" :style="squareStyle" :class="squareClass(square)"
+        @click.left="pushSquare(y, x)" @click.right.prevent="putFlag(y, x)")
         .number(v-if="opening(square) && square.nearMineNumber > 0") {{ square.nearMineNumber }}
 </template>
 
@@ -49,10 +50,15 @@ export default defineComponent({
       }
     })
     const squareClass = (square: Square): string | string[] => {
-      if (opening(square)) return square.mine ? ['-opened', '-mine'] : '-opened'
+      if (opening(square)) {
+        if (square.mine) return ['-opened', '-mine']
+        return '-opened'
+      }
+      const statuses: string[] = ['-bulge']
       const gameStatus = store.gameStatus.value
-      if (gameStatus === 'gameover' || gameStatus === 'clear') return ['-bulge', '-without-react']
-      return '-bulge'
+      if (gameStatus === 'gameover' || gameStatus === 'clear') statuses.push('-without-react')
+      if (square.status === 'flag') statuses.push('-flag')
+      return statuses
     }
 
     const smileyClass = computed<string>(() => {
@@ -87,6 +93,7 @@ export default defineComponent({
       startGame: store.startGame,
       boardSquares: store.boardSquares,
       pushSquare: store.pushSquare,
+      putFlag: store.putFlag,
       squareStyle,
       squareClass,
       smileyClass,
@@ -153,6 +160,7 @@ export default defineComponent({
     width: 100%
     height: 100%
     position: relative
+    user-select: none
     &.-bulge:not(.-without-react)
       hover(.5)
     &.-opened
@@ -163,6 +171,11 @@ export default defineComponent({
       background-position: center
       background-repeat: no-repeat
       background-image: url('~assets/games/002/mine.png')
+    &.-flag
+      background-size: 120% 90%
+      background-position: center
+      background-repeat: no-repeat
+      background-image: url('~assets/games/002/flag.png')
     .number
       centering()
       vertical-align: middle

@@ -125,13 +125,8 @@ export const buildStore = () => {
   const pushSquare = (y: number, x: number) => {
     if (gameStatus.value === 'gameover' || gameStatus.value === 'clear') return
     const square: Square = boardSquares.value[y][x]
-    if (square.status === 'open') return
+    if (square.status === 'open' || square.status === 'flag') return
     const tmpBoardSquares = prepareTmpBoardSquares()
-    if (square.status === 'flag') {
-      tmpBoardSquares[y][x] = { ...square, status: 'close' }
-      boardSquares.value = tmpBoardSquares
-      return
-    }
     tmpBoardSquares[y][x] = { ...square, status: 'open' }
     boardSquares.value = tmpBoardSquares
     if (square.mine) {
@@ -155,6 +150,18 @@ export const buildStore = () => {
     } else {
       surpriseSmiley()
     }
+  }
+  const putFlag = (y: number, x: number) => {
+    if (gameStatus.value === 'gameover' || gameStatus.value === 'clear') return
+    const square: Square = boardSquares.value[y][x]
+    if (square.status === 'open') return
+    const tmpBS: Square[][] = prepareTmpBoardSquares()
+    if (square.status === 'close') {
+      tmpBS[y][x] = { ...tmpBS[y][x], status: 'flag' }
+    } else if (square.status === 'flag') {
+      tmpBS[y][x] = { ...tmpBS[y][x], status: 'close' }
+    }
+    boardSquares.value = tmpBS
   }
 
   const closedNotMineSquareNumber = computed<number>(() => {
@@ -198,6 +205,7 @@ export const buildStore = () => {
     horizontalSquareCount,
     startGame,
     pushSquare,
+    putFlag,
     surprised
   }
 }
