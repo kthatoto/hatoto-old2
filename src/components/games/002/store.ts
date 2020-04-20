@@ -147,6 +147,7 @@ export const buildStore = () => {
     boardSquares.value = preopenBoardSquares
     if (closedNotMineSquareNumber.value === 0) {
       gameStatus.value = 'clear'
+      autoPutFlag()
     } else {
       surpriseSmiley()
     }
@@ -161,6 +162,17 @@ export const buildStore = () => {
     } else if (square.status === 'flag') {
       tmpBS[y][x] = { ...tmpBS[y][x], status: 'close' }
     }
+    boardSquares.value = tmpBS
+  }
+  const autoPutFlag = () => {
+    if (gameStatus.value !== 'clear') return
+    const tmpBS: Square[][] = prepareTmpBoardSquares();
+    [...Array(verticalSquareNumber.value).keys()].forEach((y: number) => {
+      [...Array(horizontalSquareNumber.value).keys()].forEach((x: number) => {
+        const square: Square = tmpBS[y][x]
+        if (square.status === 'close') tmpBS[y][x] = { ...square, status: 'flag' }
+      })
+    })
     boardSquares.value = tmpBS
   }
 
