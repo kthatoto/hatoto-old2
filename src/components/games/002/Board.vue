@@ -206,7 +206,7 @@ export default defineComponent({
       &.-color5
         color: maroon
       &.-color6
-        color: turquoise
+        color: teal
       &.-color7
         color: black
       &.-color8
