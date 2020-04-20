@@ -49,7 +49,7 @@ export const buildStore = () => {
     return 0
   })
   const mineCount = computed<number>(() => {
-    if (difficulty.value === 'easy') return 10
+    if (difficulty.value === 'easy') return 2
     if (difficulty.value === 'normal') return 30
     if (difficulty.value === 'difficult') return 70
     return 0
@@ -149,8 +149,21 @@ export const buildStore = () => {
       preopenBoardSquares[position.y][position.x] = { ...preopenBoardSquares[position.y][position.x], status: 'open' }
     })
     boardSquares.value = preopenBoardSquares
-    surpriseSmiley()
+    if (closedNotMineSquareNumber.value === 0) {
+      gameStatus.value = 'clear'
+    } else {
+      surpriseSmiley()
+    }
   }
+
+  const closedNotMineSquareNumber = computed<number>(() => {
+    return boardSquares.value.reduce((sum: number, squareRow: Square[]) => {
+      squareRow.forEach((square: Square) => {
+        if (square.status === 'close' && !square.mine) sum++
+      })
+      return sum
+    }, 0)
+  })
 
   startGame()
   return {
