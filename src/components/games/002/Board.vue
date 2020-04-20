@@ -7,9 +7,9 @@
       digital-number(:number="7" :height="36")
     .start-button.-bulge(@click="startGame" :class="smileyClass")
     .timer
-      digital-number(:number="9" :height="36")
-      digital-number(:number="8" :height="36")
-      digital-number(:number="7" :height="36")
+      digital-number(:number="timer.thirdDigit" :height="36")
+      digital-number(:number="timer.secondDigit" :height="36")
+      digital-number(:number="timer.firstDigit" :height="36")
   .board__body.-dent
     .square-row(v-for="(squareRow, y) in boardSquares" :key="y")
       .square(v-for="(square, x) in squareRow" :key="x" :style="squareStyle" :class="squareClass(square)" @click="pushSquare(y, x)")
@@ -22,6 +22,12 @@ import { defineComponent, onMounted, computed, ref } from '@vue/composition-api'
 import { storeInjectionKey, Square } from './store'
 import DigitalNumber from './DigitalNumber.vue'
 import injectBy from '@/utils/injectBy.ts'
+
+interface ThreeDigitNumber {
+  firstDigit: number
+  secondDigit: number
+  thirdDigit: number
+}
 
 export default defineComponent({
   components: { DigitalNumber },
@@ -60,6 +66,17 @@ export default defineComponent({
       return square.status === 'open'
     }
 
+    const calculateThreeDigitNumber = (n: number): ThreeDigitNumber => {
+      return {
+        firstDigit: n % 10,
+        secondDigit: Math.floor(n / 10) % 10,
+        thirdDigit: Math.floor(n / 100) % 10
+      }
+    }
+    const timer = computed<ThreeDigitNumber>(() => {
+      return calculateThreeDigitNumber(store.timer.count)
+    })
+
     onMounted(() => {
       const bodyElement = document.getElementsByClassName('board__body')[0]
       boardBodyWidth.value = bodyElement.clientWidth
@@ -73,7 +90,8 @@ export default defineComponent({
       squareStyle,
       squareClass,
       smileyClass,
-      opening
+      opening,
+      timer
     }
   }
 })

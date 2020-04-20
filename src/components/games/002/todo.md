@@ -2,7 +2,7 @@
 - [x] クリア判定
 - [x] smiley image and reaction
 - [ ] flag and count
-- [ ] timer
+- [x] timer
 - [ ] number image
 - [x] mine image
 - [ ] 難易度調整

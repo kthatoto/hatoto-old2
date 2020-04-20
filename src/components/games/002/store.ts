@@ -1,4 +1,4 @@
-import { InjectionKey, ref, computed, reactive, watch } from '@vue/composition-api'
+import { InjectionKey, ref, computed, reactive, watch, onBeforeUnmount } from '@vue/composition-api'
 
 import shuffle from '@/utils/shuffle.ts'
 
@@ -172,13 +172,19 @@ export const buildStore = () => {
         timer.count = 0
         break
       case 'playing':
-        timer.id = window.setInterval(() => { timer.count++ }, 1000)
+        timer.id = window.setInterval(() => {
+          timer.count = Math.min(timer.count + 1, 999)
+        }, 1000)
         break
       case 'gameover':
       case 'clear':
         clearInterval(timer.id)
         break
     }
+  })
+
+  onBeforeUnmount(() => {
+    clearInterval(timer.id)
   })
 
   startGame()
