@@ -1,4 +1,4 @@
-import { InjectionKey, ref, computed } from '@vue/composition-api'
+import { InjectionKey, ref, computed, reactive } from '@vue/composition-api'
 
 import shuffle from '@/utils/shuffle.ts'
 
@@ -24,6 +24,15 @@ export const buildStore = () => {
   const changeDifficulty = (newDifficulty: Difficulty) => {
     difficulty.value = newDifficulty
     startGame()
+  }
+
+  const surprised = reactive<{ flag: boolean, timer: number }>({ flag: false, timer: 0 })
+  const surpriseSmiley = () => {
+    clearTimeout(surprised.timer)
+    surprised.flag = true
+    surprised.timer = window.setTimeout(() => {
+      surprised.flag = false
+    }, 500)
   }
 
   const boardSquares = ref<Square[][]>([])
@@ -111,6 +120,7 @@ export const buildStore = () => {
     if (x > 0 && !tmpBS[y][x - 1].mine) recursiveSearch(y, x - 1)
     if (y > 0 && x > 0 && !tmpBS[y - 1][x - 1].mine) recursiveSearch(y - 1, x - 1)
   }
+
   const pushSquare = (y: number, x: number) => {
     if (gameStatus.value === 'gameover' || gameStatus.value === 'clear') return
     const square: Square = boardSquares.value[y][x]
@@ -139,6 +149,7 @@ export const buildStore = () => {
       preopenBoardSquares[position.y][position.x] = { ...preopenBoardSquares[position.y][position.x], status: 'open' }
     })
     boardSquares.value = preopenBoardSquares
+    surpriseSmiley()
   }
 
   startGame()
@@ -150,7 +161,8 @@ export const buildStore = () => {
     verticalSquareCount,
     horizontalSquareCount,
     startGame,
-    pushSquare
+    pushSquare,
+    surprised
   }
 }
 

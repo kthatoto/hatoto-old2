@@ -5,15 +5,14 @@
       digital-number(:number="9" :height="36")
       digital-number(:number="8" :height="36")
       digital-number(:number="7" :height="36")
-    .start-button.-bulge(@click="startGame")
+    .start-button.-bulge(@click="startGame" :class="smileyClass")
     .timer
       digital-number(:number="9" :height="36")
       digital-number(:number="8" :height="36")
       digital-number(:number="7" :height="36")
   .board__body.-dent
     .square-row(v-for="(squareRow, y) in boardSquares" :key="y")
-      .square(v-for="(square, x) in squareRow" :key="x" :style="squareStyle" @click="pushSquare(y, x)"
-        :class="opening(square) ? '-opened' : '-bulge'")
+      .square(v-for="(square, x) in squareRow" :key="x" :style="squareStyle" :class="squareClass(square)" @click="pushSquare(y, x)")
         template(v-if="opening(square)")
           .mine(v-if="square.mine")
           .number(v-else-if="square.nearMineNumber > 0") {{ square.nearMineNumber }}
@@ -45,6 +44,19 @@ export default defineComponent({
         height: squareHeight.value
       }
     })
+    const squareClass = (square: Square): string | string[] => {
+      if (opening(square)) return '-opened'
+      if (store.gameStatus.value === 'gameover') return ['-bulge', '-gameover']
+      return '-bulge'
+    }
+
+    const smileyClass = computed<string>(() => {
+      if (store.surprised.flag) return '-surprised'
+      if (store.gameStatus.value === 'clear') return '-clear'
+      if (store.gameStatus.value === 'gameover') return '-gameover'
+      return '-normal'
+    })
+
     const opening = (square: Square) => {
       return square.status === 'open'
     }
@@ -60,6 +72,8 @@ export default defineComponent({
       boardSquares: store.boardSquares,
       pushSquare: store.pushSquare,
       squareStyle,
+      squareClass,
+      smileyClass,
       opening
     }
   }
@@ -97,12 +111,24 @@ export default defineComponent({
   .mines-rest, .timer
     display: flex
   .start-button
+    hover()
     position: absolute
     height: 'calc(%s - 4px)' % headerHeight
     width: 'calc(%s - 4px)' % headerHeight
     margin: auto
     left: 0
     right: 0
+    background-size: 80%
+    background-position: center
+    background-repeat: no-repeat
+    &.-normal
+      background-image: url('~assets/games/002/smiley-normal.png')
+    &.-surprised
+      background-image: url('~assets/games/002/smiley-surprised.png')
+    &.-clear
+      background-image: url('~assets/games/002/smiley-clear.png')
+    &.-gameover
+      background-image: url('~assets/games/002/smiley-bad.png')
   .square-row
     width: 100%
     display: flex
@@ -110,7 +136,7 @@ export default defineComponent({
     width: 100%
     height: 100%
     position: relative
-    &.-bulge
+    &.-bulge:not(.-gameover)
       hover(.5)
     &.-opened
       border: 0.1px solid #707070
