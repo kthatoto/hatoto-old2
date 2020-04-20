@@ -48,12 +48,7 @@ export default defineComponent({
     border: 1px solid black
     position: relative
     .-circle
-      position: absolute
-      margin: auto
-      top: 0
-      left: 0
-      right: 0
-      bottom: 0
+      centering()
       border-radius: 50%
   .stone
     width: 40px
@@ -63,11 +58,9 @@ export default defineComponent({
     &.white
       background-color: white
   .puttable
-    cursor: pointer
+    hover()
     width: 100%
     height: 100%
-    &:hover
-      opacity: 0.8
     .-circle
       width: 10px
       height: 10px

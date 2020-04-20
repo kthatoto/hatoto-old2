@@ -120,11 +120,7 @@ export default defineComponent({
         width: 50%
         color: black
   &__finished
-    position: absolute
-    top: 0
-    left: 0
-    right: 0
-    bottom: 0
+    centering()
     width: 100%
     height: 100%
     background-color: rgba(0, 0, 0, 0.4)

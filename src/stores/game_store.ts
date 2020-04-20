@@ -16,7 +16,7 @@ export interface GameItem {
 export const buildGameStore = () => {
   const gameList: GameList = {
     '001': { numberKey: '001', width: '500px', height: '500px', thumbnail: '001.png', howtoplayTotalPage: 1, name: 'othello' },
-    '002': { numberKey: '002', width: '450px', height: '500px', thumbnail: '002.png', howtoplayTotalPage: 1, name: 'minesweeper' }
+    '002': { numberKey: '002', width: '420px', height: '500px', thumbnail: '002.png', howtoplayTotalPage: 1, name: 'minesweeper' }
   }
   const findGame = (gameName: string): GameItem => {
     const targetNumberKey: string | undefined = Object.keys(gameList).find((numberKey: string) => {

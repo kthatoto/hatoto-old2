@@ -12,7 +12,11 @@
       digital-number(:number="7" :height="36")
   .board__body.-dent
     .square-row(v-for="(squareRow, y) in boardSquares" :key="y")
-      .square.-bulge(v-for="(square, x) in squareRow" :key="x" :style="squareStyle")
+      .square(v-for="(square, x) in squareRow" :key="x" :style="squareStyle" @click="pushSquare(y, x)"
+        :class="opening(square) ? '-opened' : '-bulge'")
+        template(v-if="opening(square)")
+          .mine(v-if="square.mine")
+          .number(v-else-if="square.nearMineNumber > 0") {{ square.nearMineNumber }}
 </template>
 
 <script lang="ts">
@@ -30,10 +34,10 @@ export default defineComponent({
     const boardBodyWidth = ref<number>(0)
     const boardBodyHeight = ref<number>(0)
     const squareWidth = computed<string>(() => {
-      return `${boardBodyWidth.value / store.edgeSquareColumnCount.value}px`
+      return `${boardBodyWidth.value / store.horizontalSquareCount.value}px`
     })
     const squareHeight = computed<string>(() => {
-      return `${boardBodyHeight.value / store.edgeSquareRowCount.value}px`
+      return `${boardBodyHeight.value / store.verticalSquareCount.value}px`
     })
     const squareStyle = computed<any>(() => {
       return {
@@ -41,8 +45,11 @@ export default defineComponent({
         height: squareHeight.value
       }
     })
+    const opening = (square: Square) => {
+      return square.status === 'open'
+    }
 
-    onMounted(async () => {
+    onMounted(() => {
       const bodyElement = document.getElementsByClassName('board__body')[0]
       boardBodyWidth.value = bodyElement.clientWidth
       boardBodyHeight.value = bodyElement.clientHeight
@@ -51,7 +58,9 @@ export default defineComponent({
     return {
       startGame: store.startGame,
       boardSquares: store.boardSquares,
-      squareStyle
+      pushSquare: store.pushSquare,
+      squareStyle,
+      opening
     }
   }
 })
@@ -100,4 +109,19 @@ export default defineComponent({
   .square
     width: 100%
     height: 100%
+    position: relative
+    &.-bulge
+      hover(.5)
+    &.-opened
+      border: 0.1px solid #707070
+    .mine
+      centering()
+      width: 90%
+      height: 90%
+      background-color: black
+      border-radius: 50%
+    .number
+      centering()
+      vertical-align: middle
+      text-align: center
 </style>
