@@ -22,7 +22,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, computed, ref } from '@vue/composition-api'
 
-import { storeInjectionKey } from './store'
+import { storeInjectionKey, Square } from './store'
 import DigitalNumber from './DigitalNumber.vue'
 import injectBy from '@/utils/injectBy.ts'
 

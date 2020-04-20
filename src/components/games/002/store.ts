@@ -5,7 +5,7 @@ import shuffle from '@/utils/shuffle.ts'
 export type Difficulty = 'easy' | 'normal' | 'difficult'
 type GameStatus = 'beforePlay' | 'playing' | 'gameover' | 'clear'
 
-interface Square {
+export interface Square {
   y: number
   x: number
   status: 'close' | 'open' | 'flag'
