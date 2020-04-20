@@ -28,6 +28,11 @@ import { defineComponent, provide, ref, reactive, onMounted } from '@vue/composi
 import { buildGameStore, gameStoreInjectionKey, GameItem } from '@/stores/game_store.ts'
 
 export default defineComponent({
+  head () {
+    return {
+      title: `hatoto - ${this.game.name}`
+    }
+  },
   components: {
     othello: () => import('@/components/games/001/index.vue'),
     minesweeper: () => import('@/components/games/002/index.vue')

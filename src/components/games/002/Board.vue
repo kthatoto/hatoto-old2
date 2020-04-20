@@ -51,7 +51,6 @@ export default defineComponent({
       }
     })
     const numberStyle = computed<any>(() => {
-      console.log(squareStyle.value.width)
       return {
         fontSize: `${(parseInt(squareStyle.value.width) * 0.8)}px`,
         lineHeight: squareHeight.value
