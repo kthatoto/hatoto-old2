@@ -14,7 +14,7 @@
     .square-row(v-for="(squareRow, y) in boardSquares" :key="y")
       .square(v-for="(square, x) in squareRow" :key="x" :style="squareStyle" :class="squareClass(square)"
         @click.left="pushSquare(y, x)" @click.right.prevent="putFlag(y, x)")
-        .number(v-if="opening(square) && square.nearMineNumber > 0" :class="'-color' + square.nearMineNumber" :style="numberStyle")
+        .number(v-if="(true || opening(square)) && square.nearMineNumber > 0" :class="'-color' + square.nearMineNumber" :style="numberStyle")
           | {{ square.nearMineNumber }}
 </template>
 
@@ -202,13 +202,13 @@ export default defineComponent({
       &.-color3
         color: red
       &.-color4
-        color: purple
+        color: navy
       &.-color5
-        color: black
-      &.-color6
         color: maroon
-      &.-color7
-        color: gray
-      &.-color8
+      &.-color6
         color: turquoise
+      &.-color7
+        color: black
+      &.-color8
+        color: gray
 </style>
