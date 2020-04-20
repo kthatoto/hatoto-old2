@@ -2,14 +2,14 @@
 .board.-bulge
   .board__header.-dent
     .mines-rest
-      digital-number(:number="9" :height="36")
-      digital-number(:number="8" :height="36")
-      digital-number(:number="7" :height="36")
+      digital-number(:number="apparentlyMineNumber.third" :height="36")
+      digital-number(:number="apparentlyMineNumber.second" :height="36")
+      digital-number(:number="apparentlyMineNumber.first" :height="36")
     .start-button.-bulge(@click="startGame" :class="smileyClass")
     .timer
-      digital-number(:number="timer.thirdDigit" :height="36")
-      digital-number(:number="timer.secondDigit" :height="36")
-      digital-number(:number="timer.firstDigit" :height="36")
+      digital-number(:number="timer.third" :height="36")
+      digital-number(:number="timer.second" :height="36")
+      digital-number(:number="timer.first" :height="36")
   .board__body.-dent
     .square-row(v-for="(squareRow, y) in boardSquares" :key="y")
       .square(v-for="(square, x) in squareRow" :key="x" :style="squareStyle" :class="squareClass(square)"
@@ -25,9 +25,9 @@ import DigitalNumber from './DigitalNumber.vue'
 import injectBy from '@/utils/injectBy.ts'
 
 interface ThreeDigitNumber {
-  firstDigit: number
-  secondDigit: number
-  thirdDigit: number
+  third: number | '-'
+  second: number
+  first: number
 }
 
 export default defineComponent({
@@ -38,10 +38,10 @@ export default defineComponent({
     const boardBodyWidth = ref<number>(0)
     const boardBodyHeight = ref<number>(0)
     const squareWidth = computed<string>(() => {
-      return `${boardBodyWidth.value / store.horizontalSquareCount.value}px`
+      return `${boardBodyWidth.value / store.horizontalSquareNumber.value}px`
     })
     const squareHeight = computed<string>(() => {
-      return `${boardBodyHeight.value / store.verticalSquareCount.value}px`
+      return `${boardBodyHeight.value / store.verticalSquareNumber.value}px`
     })
     const squareStyle = computed<any>(() => {
       return {
@@ -73,14 +73,17 @@ export default defineComponent({
     }
 
     const calculateThreeDigitNumber = (n: number): ThreeDigitNumber => {
-      return {
-        firstDigit: n % 10,
-        secondDigit: Math.floor(n / 10) % 10,
-        thirdDigit: Math.floor(n / 100) % 10
-      }
+      if (n > 999) return { third: 9, second: 9, first: 9 }
+      if (n < -99) return { third: '-', second: 9, first: 9 }
+      if (n >= 0) return { third: Math.floor(n / 100) % 10, second: Math.floor(n / 10) % 10, first: n % 10, }
+      if (n < 0) return { third: '-', second: Math.floor(-n / 10) % 10, first: (-n) % 10 }
+      return { third: 0, second: 0, first: 0 }
     }
     const timer = computed<ThreeDigitNumber>(() => {
       return calculateThreeDigitNumber(store.timer.count)
+    })
+    const apparentlyMineNumber = computed<ThreeDigitNumber>(() => {
+      return calculateThreeDigitNumber(store.apparentlyMineNumber.value)
     })
 
     onMounted(() => {
@@ -98,7 +101,8 @@ export default defineComponent({
       squareClass,
       smileyClass,
       opening,
-      timer
+      timer,
+      apparentlyMineNumber
     }
   }
 })

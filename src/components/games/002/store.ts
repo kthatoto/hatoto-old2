@@ -36,27 +36,27 @@ export const buildStore = () => {
   }
 
   const boardSquares = ref<Square[][]>([])
-  const verticalSquareCount = computed<number>(() => {
+  const verticalSquareNumber = computed<number>(() => {
     if (difficulty.value === 'easy') return 9
     if (difficulty.value === 'normal') return 13
     if (difficulty.value === 'difficult') return 16
     return 0
   })
-  const horizontalSquareCount = computed<number>(() => {
+  const horizontalSquareNumber = computed<number>(() => {
     if (difficulty.value === 'easy') return 9
     if (difficulty.value === 'normal') return 13
     if (difficulty.value === 'difficult') return 16
     return 0
   })
-  const mineCount = computed<number>(() => {
+  const mineNumber = computed<number>(() => {
     if (difficulty.value === 'easy') return 2
     if (difficulty.value === 'normal') return 30
     if (difficulty.value === 'difficult') return 70
     return 0
   })
   const startGame = () => {
-    boardSquares.value = [...Array(verticalSquareCount.value)].reduce((rows: Square[][], _, y: number) => {
-      const newRow = [...Array(horizontalSquareCount.value)].reduce((row: Square[], _, x: number) => {
+    boardSquares.value = [...Array(verticalSquareNumber.value)].reduce((rows: Square[][], _, y: number) => {
+      const newRow = [...Array(horizontalSquareNumber.value)].reduce((row: Square[], _, x: number) => {
         row.push({ y, x, status: 'close', mine: false, nearMineNumber: 0 })
         return row
       }, [])
@@ -69,26 +69,26 @@ export const buildStore = () => {
   const prepareTmpBoardSquares = (): Square[][] => (JSON.parse(JSON.stringify(boardSquares.value)))
   const setMines = (excludedNumber: number) => {
     const tmpBoardSquares: Square[][] = prepareTmpBoardSquares()
-    const allNumbers: number[] = [...Array(verticalSquareCount.value * horizontalSquareCount.value).keys()].filter((n: number) => n !== excludedNumber)
+    const allNumbers: number[] = [...Array(verticalSquareNumber.value * horizontalSquareNumber.value).keys()].filter((n: number) => n !== excludedNumber)
     const shuffledNumbers: number[] = shuffle(allNumbers)
-    shuffledNumbers.slice(0, mineCount.value).forEach((mineNumber: number) => {
-      const y: number = Math.floor(mineNumber / horizontalSquareCount.value)
-      const x: number = mineNumber % horizontalSquareCount.value
+    shuffledNumbers.slice(0, mineNumber.value).forEach((mineNumber: number) => {
+      const y: number = Math.floor(mineNumber / horizontalSquareNumber.value)
+      const x: number = mineNumber % horizontalSquareNumber.value
       const square = tmpBoardSquares[y][x]
       tmpBoardSquares[y][x] = { ...square, mine: true }
     });
 
-    [...Array(verticalSquareCount.value).keys()].forEach((y: number) => {
-      [...Array(horizontalSquareCount.value).keys()].forEach((x: number) => {
+    [...Array(verticalSquareNumber.value).keys()].forEach((y: number) => {
+      [...Array(horizontalSquareNumber.value).keys()].forEach((x: number) => {
         const square: Square = tmpBoardSquares[y][x]
         if (square.mine) return
         let nearMineNumber: number = 0
         if (y > 0 && tmpBoardSquares[y - 1][x].mine) nearMineNumber++
-        if (y > 0 && x < horizontalSquareCount.value - 1 && tmpBoardSquares[y - 1][x + 1].mine) nearMineNumber++
-        if (x < horizontalSquareCount.value - 1 && tmpBoardSquares[y][x + 1].mine) nearMineNumber++
-        if (y < verticalSquareCount.value - 1 && x < horizontalSquareCount.value - 1 && tmpBoardSquares[y + 1][x + 1].mine) nearMineNumber++
-        if (y < verticalSquareCount.value - 1 && tmpBoardSquares[y + 1][x].mine) nearMineNumber++
-        if (y < verticalSquareCount.value - 1 && x > 0 && tmpBoardSquares[y + 1][x - 1].mine) nearMineNumber++
+        if (y > 0 && x < horizontalSquareNumber.value - 1 && tmpBoardSquares[y - 1][x + 1].mine) nearMineNumber++
+        if (x < horizontalSquareNumber.value - 1 && tmpBoardSquares[y][x + 1].mine) nearMineNumber++
+        if (y < verticalSquareNumber.value - 1 && x < horizontalSquareNumber.value - 1 && tmpBoardSquares[y + 1][x + 1].mine) nearMineNumber++
+        if (y < verticalSquareNumber.value - 1 && tmpBoardSquares[y + 1][x].mine) nearMineNumber++
+        if (y < verticalSquareNumber.value - 1 && x > 0 && tmpBoardSquares[y + 1][x - 1].mine) nearMineNumber++
         if (x > 0 && tmpBoardSquares[y][x - 1].mine) nearMineNumber++
         if (y > 0 && x > 0 && tmpBoardSquares[y - 1][x - 1].mine) nearMineNumber++
         tmpBoardSquares[y][x] = { ...square, nearMineNumber }
@@ -103,8 +103,8 @@ export const buildStore = () => {
     checkedPositions.push({ y, x })
     const tmpBS: Square[][] = prepareTmpBoardSquares()
     const square: Square = tmpBS[y][x]
-    const hCount: number = horizontalSquareCount.value
-    const vCount: number = verticalSquareCount.value
+    const hNumber: number = horizontalSquareNumber.value
+    const vNumber: number = verticalSquareNumber.value
     const recursiveSearch = (y: number, x: number) => {
       const position: Position | undefined = openablePositions.find((p: Position) => p.y === y && p.x === x)
       if (position === undefined) openablePositions.push({ y, x })
@@ -112,11 +112,11 @@ export const buildStore = () => {
     }
     if (square.nearMineNumber > 0) return
     if (y > 0 && !tmpBS[y - 1][x].mine) recursiveSearch(y - 1, x)
-    if (y > 0 && x < hCount - 1 && !tmpBS[y - 1][x + 1].mine) recursiveSearch(y - 1, x + 1)
-    if (x < hCount - 1 && !tmpBS[y][x + 1].mine) recursiveSearch(y, x + 1)
-    if (y < vCount - 1 && x < hCount - 1 && !tmpBS[y + 1][x + 1].mine) recursiveSearch(y + 1, x + 1)
-    if (y < vCount - 1 && !tmpBS[y + 1][x].mine) recursiveSearch(y + 1, x)
-    if (y < vCount - 1 && x > 0 && !tmpBS[y + 1][x - 1].mine) recursiveSearch(y + 1, x - 1)
+    if (y > 0 && x < hNumber - 1 && !tmpBS[y - 1][x + 1].mine) recursiveSearch(y - 1, x + 1)
+    if (x < hNumber - 1 && !tmpBS[y][x + 1].mine) recursiveSearch(y, x + 1)
+    if (y < vNumber - 1 && x < hNumber - 1 && !tmpBS[y + 1][x + 1].mine) recursiveSearch(y + 1, x + 1)
+    if (y < vNumber - 1 && !tmpBS[y + 1][x].mine) recursiveSearch(y + 1, x)
+    if (y < vNumber - 1 && x > 0 && !tmpBS[y + 1][x - 1].mine) recursiveSearch(y + 1, x - 1)
     if (x > 0 && !tmpBS[y][x - 1].mine) recursiveSearch(y, x - 1)
     if (y > 0 && x > 0 && !tmpBS[y - 1][x - 1].mine) recursiveSearch(y - 1, x - 1)
   }
@@ -134,7 +134,7 @@ export const buildStore = () => {
       return
     }
     if (gameStatus.value === 'beforePlay') {
-      setMines(y * horizontalSquareCount.value + x)
+      setMines(y * horizontalSquareNumber.value + x)
       gameStatus.value = 'playing'
     }
     openablePositions.splice(0, openablePositions.length)
@@ -172,6 +172,15 @@ export const buildStore = () => {
       return sum
     }, 0)
   })
+  const flagNumber = computed<number>(() => {
+    return boardSquares.value.reduce((sum: number, squareRow: Square[]) => {
+      squareRow.forEach((square: Square) => {
+        if (square.status === 'flag') sum++
+      })
+      return sum
+    }, 0)
+  })
+  const apparentlyMineNumber = computed<number>(() => (mineNumber.value - flagNumber.value))
 
   watch(gameStatus, (newStatus: GameStatus) => {
     switch (newStatus) {
@@ -179,9 +188,7 @@ export const buildStore = () => {
         timer.count = 0
         break
       case 'playing':
-        timer.id = window.setInterval(() => {
-          timer.count = Math.min(timer.count + 1, 999)
-        }, 1000)
+        timer.id = window.setInterval(() => { timer.count++ }, 1000)
         break
       case 'gameover':
       case 'clear':
@@ -201,8 +208,9 @@ export const buildStore = () => {
     changeDifficulty,
     timer,
     boardSquares,
-    verticalSquareCount,
-    horizontalSquareCount,
+    verticalSquareNumber,
+    horizontalSquareNumber,
+    apparentlyMineNumber,
     startGame,
     pushSquare,
     putFlag,

@@ -1,7 +1,7 @@
 # Minesweeper
 - [x] クリア判定
 - [x] smiley image and reaction
-- [ ] flag and count
+- [x] flag and count
 - [x] timer
 - [ ] number image
 - [x] mine image
