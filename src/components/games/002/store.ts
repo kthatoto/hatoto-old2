@@ -1,4 +1,4 @@
-import { InjectionKey, ref, computed, reactive } from '@vue/composition-api'
+import { InjectionKey, ref, computed, reactive, watch } from '@vue/composition-api'
 
 import shuffle from '@/utils/shuffle.ts'
 
@@ -26,11 +26,11 @@ export const buildStore = () => {
     startGame()
   }
 
-  const surprised = reactive<{ flag: boolean, timer: number }>({ flag: false, timer: 0 })
+  const surprised = reactive<{ flag: boolean, timerId: number }>({ flag: false, timerId: 0 })
   const surpriseSmiley = () => {
-    clearTimeout(surprised.timer)
+    clearTimeout(surprised.timerId)
     surprised.flag = true
-    surprised.timer = window.setTimeout(() => {
+    surprised.timerId = window.setTimeout(() => {
       surprised.flag = false
     }, 500)
   }
@@ -121,6 +121,7 @@ export const buildStore = () => {
     if (y > 0 && x > 0 && !tmpBS[y - 1][x - 1].mine) recursiveSearch(y - 1, x - 1)
   }
 
+  const timer = reactive<{ count: number, id: number }>({ count: 0, id: 0 })
   const pushSquare = (y: number, x: number) => {
     if (gameStatus.value === 'gameover' || gameStatus.value === 'clear') return
     const square: Square = boardSquares.value[y][x]
@@ -165,11 +166,27 @@ export const buildStore = () => {
     }, 0)
   })
 
+  watch(gameStatus, (newStatus: GameStatus) => {
+    switch (newStatus) {
+      case 'beforePlay':
+        timer.count = 0
+        break
+      case 'playing':
+        timer.id = window.setInterval(() => { timer.count++ }, 1000)
+        break
+      case 'gameover':
+      case 'clear':
+        clearInterval(timer.id)
+        break
+    }
+  })
+
   startGame()
   return {
     gameStatus,
     difficulty,
     changeDifficulty,
+    timer,
     boardSquares,
     verticalSquareCount,
     horizontalSquareCount,
