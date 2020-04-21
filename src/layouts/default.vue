@@ -1,4 +1,3 @@
 <template lang="pug">
-div
-  nuxt
+nuxt.default
 </template>
