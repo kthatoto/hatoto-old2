@@ -1,6 +1,6 @@
 <template lang="pug">
-.game
-  .game__header(:style="{ width: bodyStyle.width }")
+.game(:style="bodyStyle")
+  .game__header(:style="{ width: gameStyle.width }")
     nuxt-link.back(to="/games")
       icon.icon.-r(name="chevron-left")
       span back to games
@@ -9,7 +9,7 @@
       .buttons
         icon.icon.-large.-hover.-rr(name="question-circle" @click.native="openHowtoplay")
         icon.icon.-large.-hover(name="list" @click.native="openChangelog")
-  .game__body(:is="game.name" :style="bodyStyle")
+  .game__body(:is="game.name" :style="gameStyle")
   el-dialog(title="Changelog" :visible.sync="showingChangelog")
     vue-markdown.markdown(:source="changelog")
   el-dialog(title="How To Play" :visible.sync="showingHowtoplay" custom-class="-howtoplay")
@@ -69,6 +69,9 @@ export default defineComponent({
     }
 
     const bodyStyle = reactive<any>({
+      height: null
+    })
+    const gameStyle = reactive<any>({
       width: game.width,
       height: game.height,
       transform: 'scale(1.0)'
@@ -78,13 +81,20 @@ export default defineComponent({
 
     onMounted(async () => {
       changelog.value = (await import(`@/components/games/${game.numberKey}/assets/changelog.md`)).default
-      const gameWidth: number = parseInt(bodyStyle.width)
+      const gameWidth: number = parseInt(game.width)
       const sidePadding: number = 20
       if (gameWidth <= screen.width && screen.width <= gameWidth + sidePadding * 2) {
         const translateXToLeft: number = sidePadding + (gameWidth - screen.width) / 2
-        bodyStyle.transform = `translateX(-${translateXToLeft}px)`
+        gameStyle.transform = `translateX(-${translateXToLeft}px)`
       } else if (screen.width < gameWidth) {
-        bodyStyle.transform = `translateX(-${sidePadding}px) scale(${screen.width / gameWidth})`
+        const scaleRatio: number = screen.width / gameWidth
+        gameStyle.transform = `translateX(-${sidePadding}px) scale(${scaleRatio})`
+        setTimeout(() => {
+          const gameHeight: number = parseInt(game.height)
+          const bodyHeight: number = document.getElementsByClassName('game')[0].clientHeight
+          bodyStyle.height = `${bodyHeight - (gameHeight * (1 - scaleRatio)) + 30}px`
+          console.log(bodyStyle)
+        }, 500)
       }
 
       if (game.preloadAssets) {
@@ -96,6 +106,7 @@ export default defineComponent({
     return {
       game,
       bodyStyle,
+      gameStyle,
       changelog,
       showingChangelog,
       openChangelog,
@@ -115,7 +126,6 @@ export default defineComponent({
 .game
   sidePadding = 20px
   padding: 50px sidePadding 0
-  max-height: 90vh
   overflow: hidden
   .back
     display: inline-block
