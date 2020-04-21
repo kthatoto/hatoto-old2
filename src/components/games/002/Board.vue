@@ -82,7 +82,7 @@ export default defineComponent({
     const calculateThreeDigitNumber = (n: number): ThreeDigitNumber => {
       if (n > 999) return { third: 9, second: 9, first: 9 }
       if (n < -99) return { third: '-', second: 9, first: 9 }
-      if (n >= 0) return { third: Math.floor(n / 100) % 10, second: Math.floor(n / 10) % 10, first: n % 10, }
+      if (n >= 0) return { third: Math.floor(n / 100) % 10, second: Math.floor(n / 10) % 10, first: n % 10 }
       if (n < 0) return { third: '-', second: Math.floor(-n / 10) % 10, first: (-n) % 10 }
       return { third: 0, second: 0, first: 0 }
     }
