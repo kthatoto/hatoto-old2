@@ -60,6 +60,9 @@ export default defineComponent({
       background-position: 50%
       background-color: #eee
       height: 100%
+      box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .2)
+      border: none
+      overflow: hidden
   &__name
     position: absolute
     width: 100%
@@ -69,6 +72,7 @@ export default defineComponent({
     bottom: 0
     padding: 5px
     font-weight: bold
+    border-radius: 0 0 4px 4px
 
 @media (max-width: 540px)
   .games
