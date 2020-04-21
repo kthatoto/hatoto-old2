@@ -4,10 +4,9 @@
     icon.icon.-r(name="chevron-left")
     span back to top
   .games__list
-    nuxt-link.games__item(v-for="(game, number) in gameList" :key="game.number" :to="gameLink(game)"
-      :style="{ backgroundImage: `url(${gameThumbnail(game)})` }")
-      .games__number {{ number }}
-      .games__name {{ game.name }}
+    nuxt-link.games__item(v-for="(game, number) in gameList" :key="game.number" :to="gameLink(game)")
+      el-card.card(:style="{ backgroundImage: `url(${gameThumbnail(game)})` }")
+        .games__name {{ game.name }}
 </template>
 
 <script lang="ts">
@@ -51,33 +50,22 @@ export default defineComponent({
   itemHeight = 150px
   &__item
     width: 30%
-    border: 1px solid #ccc
     height: itemHeight
     position: relative
     cursor: pointer
     margin-bottom: 30px
-    background-color: #eee
-    background-repeat: no-repeat
-    background-size: cover
-    background-position: 50%
-    &:hover .games__number
-      visibility: visible
-  &__number
-    visibility: hidden
-    position: absolute
-    font-size: 64px
-    width: 100%
-    height: itemHeight
-    line-height: itemHeight
-    margin: auto
-    text-align: center
-    background-color: rgba(0, 0, 0, .4)
-    color: white
-    z-index: 1
+    .card
+      background-repeat: no-repeat
+      background-size: cover
+      background-position: 50%
+      background-color: #eee
+      height: 100%
   &__name
     position: absolute
     width: 100%
     background-color: white
+    left: 0
+    right: 0
     bottom: 0
     padding: 5px
     font-weight: bold
