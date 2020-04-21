@@ -13,7 +13,7 @@
   .board__body.-dent
     .square-row(v-for="(squareRow, y) in boardSquares" :key="y")
       .square(v-for="(square, x) in squareRow" :key="x" :style="squareStyle" :class="squareClass(square)"
-        @click.left="pushSquare(y, x)" @click.right.prevent="putFlag(y, x)")
+        @click.left="pushSquare(y, x)" @click.right.prevent="putFlag(y, x)" v-longclick="() => putFlag(y, x)")
         .number(v-if="opening(square) && square.nearMineNumber > 0" :class="'-color' + square.nearMineNumber" :style="numberStyle")
           | {{ square.nearMineNumber }}
 </template>

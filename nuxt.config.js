@@ -26,7 +26,8 @@ export default {
     '@/plugins/element-ui',
     '@/plugins/vue-composition-api',
     '@/plugins/vue-awesome',
-    '@/plugins/vue-markdown'
+    '@/plugins/vue-markdown',
+    '@/plugins/vue-long-click'
   ],
   buildModules: [
     '@nuxt/typescript-build'
