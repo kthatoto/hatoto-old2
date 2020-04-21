@@ -3,6 +3,9 @@ import { resolve } from 'path'
 export default {
   mode: 'spa',
   srcDir: 'src',
+  env: {
+    GA_TRACKING_ID: process.env.GA_TRACKING_ID
+  },
   head: {
     title: process.env.npm_package_name || '',
     meta: [
@@ -23,6 +26,7 @@ export default {
     '~/styles/common.styl'
   ],
   plugins: [
+    '@/plugins/ga',
     '@/plugins/element-ui',
     '@/plugins/vue-composition-api',
     '@/plugins/vue-awesome',
@@ -30,12 +34,12 @@ export default {
     '@/plugins/vue-long-click'
   ],
   buildModules: [
-    '@nuxt/typescript-build'
+    '@nuxt/typescript-build',
+    ['@nuxtjs/google-analytics', { id: process.env.GA_TRACKING_ID }]
   ],
   modules: [
     '@nuxtjs/axios',
     '@nuxtjs/dotenv',
-    ['@nuxtjs/google-analytics', { id: process.env.GA_TRACKING_ID }],
     ['nuxt-stylus-resources-loader', [
       resolve(__dirname, 'src/styles/scroll-shadow.styl'),
       resolve(__dirname, 'src/styles/markdown.styl'),
