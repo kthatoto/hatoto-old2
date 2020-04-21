@@ -35,6 +35,7 @@ export default {
   modules: [
     '@nuxtjs/axios',
     '@nuxtjs/dotenv',
+    ['@nuxtjs/google-analytics', { id: process.env.GA_TRACKING_ID }],
     ['nuxt-stylus-resources-loader', [
       resolve(__dirname, 'src/styles/scroll-shadow.styl'),
       resolve(__dirname, 'src/styles/markdown.styl'),
