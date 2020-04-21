@@ -158,13 +158,13 @@ export default defineComponent({
     background-position: center
     background-repeat: no-repeat
     &.-normal
-      background-image: url('~assets/games/002/smiley-normal.png')
+      background-image: url('./assets/images/smiley-normal.png')
     &.-surprised
-      background-image: url('~assets/games/002/smiley-surprised.png')
+      background-image: url('./assets/images/smiley-surprised.png')
     &.-clear
-      background-image: url('~assets/games/002/smiley-clear.png')
+      background-image: url('./assets/images/smiley-clear.png')
     &.-gameover
-      background-image: url('~assets/games/002/smiley-bad.png')
+      background-image: url('./assets/images/smiley-bad.png')
   .square-row
     width: 100%
     display: flex
@@ -182,12 +182,12 @@ export default defineComponent({
       background-size: 80%
       background-position: center
       background-repeat: no-repeat
-      background-image: url('~assets/games/002/mine.png')
+      background-image: url('./assets/images/mine.png')
     &.-flag
       background-size: 120% 90%
       background-position: center
       background-repeat: no-repeat
-      background-image: url('~assets/games/002/flag.png')
+      background-image: url('./assets/images/flag.png')
     .number
       centering()
       monospaced-font()

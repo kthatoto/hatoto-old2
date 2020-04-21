@@ -20,12 +20,18 @@
       .pagination {{ howtoplayPage }} / {{ howtoplayTotalPage }}
       el-button.next-button(v-show="howtoplayPage < howtoplayTotalPage" @click="moveHowtoplayPage(1)")
         icon.icon(name="chevron-right")
+  .preload-images
+    img(v-for="img in preloadImages" :src="require(`@/components/games/${game.numberKey}/assets/images/${img}`)")
 </template>
 
 <script lang="ts">
 import { defineComponent, provide, ref, reactive, onMounted } from '@vue/composition-api'
 
 import { buildGameStore, gameStoreInjectionKey, GameItem } from '@/stores/game_store.ts'
+
+interface PreloadAssets {
+  images: string[]
+}
 
 export default defineComponent({
   head () {
@@ -67,6 +73,9 @@ export default defineComponent({
       height: game.height,
       transform: 'scale(1.0)'
     })
+
+    const preloadImages = ref<string[]>([])
+
     onMounted(async () => {
       changelog.value = (await import(`@/components/games/${game.numberKey}/assets/changelog.md`)).default
       const gameWidth: number = parseInt(bodyStyle.width)
@@ -77,7 +86,13 @@ export default defineComponent({
       } else if (screen.width < gameWidth) {
         bodyStyle.transform = `translateX(-${sidePadding}px) scale(${screen.width / gameWidth})`
       }
+
+      if (game.preloadAssets) {
+        const preloadAssets: PreloadAssets = (await import(`@/components/games/${game.numberKey}/config/preloadAssets.js`)).default
+        if (preloadAssets.images) preloadImages.value = preloadAssets.images
+      }
     })
+
     return {
       game,
       bodyStyle,
@@ -89,7 +104,8 @@ export default defineComponent({
       openHowtoplay,
       howtoplayPage,
       howtoplayTotalPage,
-      moveHowtoplayPage
+      moveHowtoplayPage,
+      preloadImages
     }
   }
 })
@@ -163,6 +179,8 @@ export default defineComponent({
       .el-dialog__body
         height: calc(100% - 120px)
         position: relative
+  .preload-images
+    display: none
 
 @media (max-width: 540px)
   .game
