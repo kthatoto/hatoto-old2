@@ -14,13 +14,13 @@
     ],
     "headers": [
       {
-        "sources": "**/*.@(js|css)",
+        "source": "**/*.@(js|css)",
         "headers": [
           { "key": "Cache-Control", "value": "max-age=604800" }
         ]
       },
       {
-        "sources": "**/*.@(jpg|jpeg|gif|png)",
+        "source": "**/*.@(jpg|jpeg|gif|png)",
         "headers": [
           { "key": "Cache-Control", "value": "max-age=604800" }
         ]
