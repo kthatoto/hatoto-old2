@@ -41,7 +41,8 @@ export default defineComponent({
   },
   components: {
     othello: () => import('@/components/games/001/index.vue'),
-    minesweeper: () => import('@/components/games/002/index.vue')
+    minesweeper: () => import('@/components/games/002/index.vue'),
+    freecell: () => import('@/components/games/003/index.vue')
   },
   setup (_, context) {
     const gameStore = buildGameStore()

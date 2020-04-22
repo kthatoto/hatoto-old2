@@ -33,6 +33,15 @@ export const buildGameStore = () => {
       howtoplayTotalPage: 1,
       name: 'minesweeper',
       preloadAssets: true
+    },
+    '003': {
+      numberKey: '003',
+      width: '500px',
+      height: '700px',
+      thumbnail: '003.png',
+      howtoplayTotalPage: 1,
+      name: 'freecell',
+      preloadAssets: false
     }
   }
   const findGame = (gameName: string): GameItem => {
