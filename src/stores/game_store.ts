@@ -36,7 +36,7 @@ export const buildGameStore = () => {
     },
     '003': {
       numberKey: '003',
-      width: '500px',
+      width: '850px',
       height: '700px',
       thumbnail: '003.png',
       howtoplayTotalPage: 1,

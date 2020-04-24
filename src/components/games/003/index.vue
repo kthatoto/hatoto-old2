@@ -18,4 +18,6 @@ export default defineComponent({
 </script>
 
 <style lang="stylus" scoped>
+.freecell
+  overflow-y: scroll
 </style>
