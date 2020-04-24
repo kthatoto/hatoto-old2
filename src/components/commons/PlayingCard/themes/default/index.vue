@@ -12,14 +12,6 @@
   .playing-card__suits(v-else)
     .playing-card__suit-item(v-for="suitClass in suitClasses" :class="suitClass")
       | {{ displayingSuit }}
-
-  .development
-    table.development-grids
-      tr.development-gridRow(v-for="i in 30" :key="i")
-        td.development-grid(v-for="j in 20" :key="j"
-          :class="{'-colored': colored(i, j)}")
-    .horizontal-line
-    .vertical-line
 </template>
 
 <script lang="ts">
@@ -105,8 +97,7 @@ export default defineComponent({
       displayPicture,
       bodyClasses,
       pictureStyle,
-      suitClasses,
-      colored: (i, j) => ((i + j) % 2 === 0)
+      suitClasses
     }
   }
 })
@@ -277,32 +268,4 @@ export default defineComponent({
       &.-suit9
         bottomCenter()
         bottom: 28px
-
-.developmenta
-  width: 100%
-  height: calc(100% - 1px)
-  position: relative
-  z-index: -1
-  .horizontal-line, .vertical-line
-    border: 0.1px solid blue
-    margin: auto
-    position: absolute
-    top: 0
-    bottom: 0
-    left: 0
-    right: 0
-  .horizontal-line
-    width: 100%
-    height: 0
-  .vertical-line
-    width: 0
-    height: 100%
-  &-grids
-    width: 100%
-    height: 100%
-    border-collapse: collapse
-    table-layout: fixed
-    .development-grid
-      &.-colored
-        background-color: lightblue
 </style>
