@@ -1,23 +1,25 @@
 <template lang="pug">
 .playing-card(:style="cardStyle")
-  .playing-card__inner(:style="innerStyle")
-    DefaultTheme(v-if="theme === 'default'" :suit="suit" :rank="rank" :joker="joker")
+  .playing-card__frame(:class="{'-back': back}")
+    .playing-card__inner(:style="innerStyle")
+      DefaultTheme(v-if="theme === 'default'" :data="data")
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from '@vue/composition-api'
+import { defineComponent, computed, ref } from '@vue/composition-api'
 
 import DefaultTheme from './themes/default/index.vue'
 
 export type Suit = 'spade' | 'heart' | 'diamond' | 'club' | ''
 type Theme = 'default'
-interface Props {
+export interface Props {
   width: number
   height: number
   theme: string
   suit: Suit
   rank: number
   joker: boolean
+  back: boolean
 }
 
 export default defineComponent({
@@ -28,7 +30,8 @@ export default defineComponent({
     theme: { type: String, reuired: false, default: 'default' },
     suit: { type: String, required: false, default: '' },
     rank: { type: Number, required: false, default: 0 },
-    joker: { type: Boolean, required: false, default: false }
+    joker: { type: Boolean, required: false, default: false },
+    back: { type: Boolean, required: false, default: false }
   },
   setup (props: Props, _context) {
     const { width, height, theme, suit, rank, joker } = props
@@ -67,6 +70,7 @@ export default defineComponent({
     })
 
     return {
+      data: props,
       cardStyle,
       innerStyle
     }
@@ -76,18 +80,24 @@ export default defineComponent({
 
 <style lang="stylus" scoped>
 .playing-card
-  border: 1px solid #999
-  border-radius: 4%
   display: inline-block
   position: relative
-  perspective: 500px
-  transition: transform .5s linear
+  perspective: 1000px
+  user-select: none
+  &__frame
+    width: 100%
+    height: 100%
+    border: 1px solid #999
+    border-radius: 4%
+    transition: transform .3s linear
+    backface-visibility: hidden
+    transform-style: preserve-3d
+    &.-back
+      transform: rotateY(180deg)
   &__inner
     transform-origin: top left
     position: relative
     width: calc(116px - 1px)
     height: calc(178px - 1px)
     margin: 0
-  &.-back
-    transform: rotateY(180deg)
 </style>

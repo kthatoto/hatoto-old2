@@ -17,7 +17,7 @@
 <script lang="ts">
 import { defineComponent, PropType, computed } from '@vue/composition-api'
 
-import { Props } from './index.vue'
+import { Props } from '../../index.vue'
 
 export default defineComponent({
   props: {
@@ -99,9 +99,12 @@ export default defineComponent({
 <style lang="stylus" scoped>
 .playing-card
   &__front
+    backface-visibility: hidden
     font-family: 'Impact'
     height: 100%
     position: relative
+    background-color: white
+    border-radius: 4%
     &.-red
       color: red
     &.-black

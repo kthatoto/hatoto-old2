@@ -20,4 +20,5 @@ export default defineComponent({
 <style lang="stylus" scoped>
 .freecell
   overflow-y: scroll
+  background-color: lightgray
 </style>

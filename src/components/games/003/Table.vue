@@ -1,6 +1,7 @@
 <template lang="pug">
 .table
-  playing-card(suit="spade" :rank="13" :width="200")
+  playing-card(suit="spade" :rank="13" :width="50")
+  playing-card(suit="spade" :rank="13" :width="300")
   playing-card(suit="diamond" :rank="11")
   playing-card(suit="club" :rank="12" :height="200" :width="200")
   playing-card(suit="spade" :rank="10")
