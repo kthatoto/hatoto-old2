@@ -80,10 +80,14 @@ export default defineComponent({
   border-radius: 4%
   display: inline-block
   position: relative
+  perspective: 500px
+  transition: transform .5s linear
   &__inner
     transform-origin: top left
     position: relative
     width: calc(116px - 1px)
     height: calc(178px - 1px)
     margin: 0
+  &.-back
+    transform: rotateY(180deg)
 </style>
