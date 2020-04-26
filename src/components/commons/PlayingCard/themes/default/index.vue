@@ -1,5 +1,5 @@
 <template lang="pug">
-.playing-card__default
+.playing-card__default(:class="{'-back': data.back}")
   Front(:data="data")
   Back
 </template>
@@ -14,7 +14,7 @@ import Back from './Back.vue'
 export default defineComponent({
   components: { Front, Back },
   props: {
-    data: { type: Object as PropType<Props> }
+    data: { type: Object as PropType<Props>, required: true }
   },
   setup (props: Props, _context) {
     return {}
@@ -23,8 +23,11 @@ export default defineComponent({
 </script>
 
 <style lang="stylus" scoped>
-.playing-card
-  &__default
-    height: 100%
-    position: relative
+.playing-card__default
+  width: 100%
+  height: 100%
+  transition: transform .3s linear
+  transform-style: preserve-3d
+  &.-back
+    transform: rotateY(180deg)
 </style>

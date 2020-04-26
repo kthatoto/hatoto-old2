@@ -21,7 +21,7 @@ import { Props } from '../../index.vue'
 
 export default defineComponent({
   props: {
-    data: { type: Object as PropType<Props> }
+    data: { type: Object as PropType<Props>, required: true }
   },
   setup (props: { data: Props }, _context) {
     const data: Props = props.data
@@ -99,11 +99,18 @@ export default defineComponent({
 <style lang="stylus" scoped>
 .playing-card
   &__front
+    width: 100%
+    height: 100%
+    position: absolute
+    top: 0
+    left: 0
+    right: 0
+    bottom: 0
+    z-index: -1
     backface-visibility: hidden
     font-family: 'Impact'
-    height: 100%
-    position: relative
     background-color: white
+    border: 1px solid #999
     border-radius: 4%
     &.-red
       color: red
