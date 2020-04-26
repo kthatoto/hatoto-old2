@@ -12,6 +12,10 @@
   .playing-card__suits(v-else)
     .playing-card__suit-item(v-for="suitClass in suitClasses" :class="suitClass")
       | {{ displayingSuit }}
+
+  // .development
+  //   .horizontal-line
+  //   .vertical-line
 </template>
 
 <script lang="ts">
@@ -121,20 +125,27 @@ export default defineComponent({
         transform: scaleX(0.8)
   &__index
     position: absolute
-    width: 15px
+    width: 15%
     text-align: center
-    height: 10px
-    line-height: 10px
-    padding-top: 5px
-    .suit
-      font-size: large
+    height: 10%
+    line-height: 100%
+    padding-top: 5%
+    font-size: 16%
     &.-top
-      top: 5px
       left: 0
+      top: 0
+      .rank
+        top: 5%
+      .suit
+        top: 10%
     &.-bottom
-      bottom: 5px
       right: 0
+      bottom: 0
       transform: rotate(180deg)
+      .rank
+        bottom: 5%
+      .suir
+        bottom: 10%
   &__picture
     border: 1px solid #999
     width: 75%
@@ -150,19 +161,57 @@ export default defineComponent({
     background-repeat: no-repeat
     .suit
       position: absolute
-      font-size: 40px
+      font-size: 40%
       &.-top
-        top: -10px
+        top: -10%
         left: 0
       &.-bottom
-        bottom: -10px
+        bottom: -10%
         right: 0
         transform: rotate(180deg)
   &__suit-item
     position: absolute
     display: inline
+
+    verticalEdgeMargin = 4%
+    horizontalEdgeMargin = 12%
+    centerVerticalThirdMargin = 19%
+    sideQuarterMargin = 24%
+    tenCenterVerticalMargin = 16%
+    centering()
+      width: 100%
+      text-align: center
+      margin: auto
+      height: 32%
+      top: 0
+      bottom: 0
+    leftVerticalCentering()
+      height: 32%
+      top: 0
+      bottom: 0
+      margin: auto
+      left: horizontalEdgeMargin
+    rightVerticalCentering()
+      height: 32%
+      top: 0
+      bottom: 0
+      margin: auto
+      right: horizontalEdgeMargin
+      transform: rotate(180deg)
+    centerHalfTopCentering()
+      width: 100%
+      text-align: center
+      margin: auto
+      top: centerVerticalThirdMargin
+    centerHalfBottomCentering()
+      width: 100%
+      text-align: center
+      margin: auto
+      bottom: centerVerticalThirdMargin
+      transform: rotate(180deg)
+
     &.-one
-      font-size: 100px
+      font-size: 100%
       width: 100%
       height: 80%
       text-align: center
@@ -171,104 +220,93 @@ export default defineComponent({
       &.-suit0
         margin: auto
     &:not(.-one)
-      font-size: 40px
+      font-size: 40%
     &.-two, &.-three
       width: 100%
       text-align: center
-      verticalMargin = 20px
       &.-suit0
-        top: verticalMargin
+        top: verticalEdgeMargin
       &.-suit1
-        bottom: verticalMargin
+        bottom: verticalEdgeMargin
         transform: rotate(180deg)
-    center()
-      width: 100%
-      text-align: center
-      margin: auto
-      height: 32%
-      top: 0
-      bottom: 0
     &.-three
       &.-suit2
-        center()
-    verticalMargin = 10px
-    horizontalMargin = 12px
+        centering()
     &.-four, &.-five, &.-six, &.-seven, &.-eight, &.-nine, &.-ten
       &.-suit0
-        top: verticalMargin
-        left: horizontalMargin
+        top: verticalEdgeMargin
+        left: horizontalEdgeMargin
       &.-suit1
-        top: verticalMargin
-        right: horizontalMargin
+        top: verticalEdgeMargin
+        right: horizontalEdgeMargin
       &.-suit2
-        bottom: verticalMargin
-        left: horizontalMargin
+        bottom: verticalEdgeMargin
+        left: horizontalEdgeMargin
         transform: rotate(180deg)
       &.-suit3
-        bottom: verticalMargin
-        right: horizontalMargin
+        bottom: verticalEdgeMargin
+        right: horizontalEdgeMargin
         transform: rotate(180deg)
     &.-five
       &.-suit4
-        center()
-    leftVerticalCenter()
-      height: 32%
-      top: 0
-      bottom: 0
-      margin: auto
-      left: horizontalMargin
-    rightVerticalCenter()
-      height: 32%
-      top: 0
-      bottom: 0
-      margin: auto
-      right: horizontalMargin
-      transform: rotate(180deg)
+        centering()
     &.-six, &.-seven, &.-eight
       &.-suit4
-        leftVerticalCenter()
+        leftVerticalCentering()
       &.-suit5
-        rightVerticalCenter()
-    topCenter()
-      width: 100%
-      text-align: center
-      margin: auto
-      top: 35px
-    bottomCenter()
-      width: 100%
-      text-align: center
-      margin: auto
-      bottom: 35px
-      transform: rotate(180deg)
+        rightVerticalCentering()
+
     &.-seven, &.-eight
       &.-suit6
-        topCenter()
+        centerHalfTopCentering()
     &.-eight
       &.-suit7
-        bottomCenter()
+        centerHalfBottomCentering()
+
     &.-nine, &.-ten
       &.-suit4
-        left: horizontalMargin
-        top: 43px
+        left: horizontalEdgeMargin
+        top: sideQuarterMargin
       &.-suit5
-        right: horizontalMargin
-        top: 43px
+        right: horizontalEdgeMargin
+        top: sideQuarterMargin
       &.-suit6
-        left: horizontalMargin
-        bottom: 43px
+        left: horizontalEdgeMargin
+        bottom: sideQuarterMargin
         transform: rotate(180deg)
       &.-suit7
-        right: horizontalMargin
-        bottom: 43px
+        right: horizontalEdgeMargin
+        bottom: sideQuarterMargin
         transform: rotate(180deg)
     &.-nine
       &.-suit8
-        center()
+        centering()
     &.-ten
       &.-suit8
-        topCenter()
-        top: 28px
+        centerHalfTopCentering()
+        top: tenCenterVerticalMargin
       &.-suit9
-        bottomCenter()
-        bottom: 28px
+        centerHalfBottomCentering()
+        bottom: tenCenterVerticalMargin
+
+.development
+  width: 100%
+  height: 100%
+  position: relative
+  .horizontal-line
+    margin: auto
+    width: 100%
+    height: 0
+    border: 1px solid blue
+    top: 0
+    bottom: 0
+    position: absolute
+  .vertical-line
+    margin: auto
+    width: 0
+    height: 100%
+    border: 1px solid blue
+    right: 0
+    left: 0
+    position: absolute
 </style>

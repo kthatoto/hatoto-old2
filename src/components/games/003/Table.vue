@@ -1,10 +1,5 @@
 <template lang="pug">
 .table(@click="turnCards")
-  playing-card(suit="spade" :rank="13" :width="50" :back="back")
-  playing-card(suit="spade" :rank="13" :width="300" :back="back")
-  playing-card(suit="diamond" :rank="11" :back="back")
-  playing-card(suit="spade" :rank="10" :back="back")
-
   .row(v-for="rank in ranks" :key="rank")
     playing-card(v-for="suit in suits" :suit="suit" :rank="rank" :width="200" :key="suit" :back="back")
 </template>

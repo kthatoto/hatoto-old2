@@ -46,11 +46,11 @@ export default defineComponent({
     const dw: number = 116 // default width
     const cardStyle = computed<any>(() => {
       if (width === 0 && height === 0)
-        return { width: `${dw}px`, height: `${dh}px` }
+        return { width: `${dw}px`, height: `${dh}px`, fontSize: '100px' }
       if (width === 0 && height > 0)
-        return { width: `${dw * height / dh}px`, height: `${height}px` }
+        return { width: `${dw * height / dh}px`, height: `${height}px`, fontSize: `${100 * height / db}px` }
       if (width > 0 && height === 0)
-        return { width: `${width}px`, height: `${dh * width / dw}px` }
+        return { width: `${width}px`, height: `${dh * width / dw}px`, fontSize: `${100 * width / dw}px` }
       return {}
     })
 
