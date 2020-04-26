@@ -32,23 +32,27 @@ export default defineComponent({
     back: { type: Boolean, required: false, default: false }
   },
   setup (props: Props, _context) {
-    const { width, height, theme, suit, rank, joker } = props
-    if (joker && (suit !== '' || rank !== 0))
-      throw new Error('`joker` can\'t have `rank` or `suit`')
-    if (rank < 0 || 13 < rank)
-      throw new Error('`rank` is invalid value')
-    if (width < 0 || height < 0)
-      throw new Error('`width` and `height` can\'t be negative value')
-    if (width > 0 && height > 0)
-      throw new Error('both `width` and `height` can\'t be inputted as props')
+    const validate = () => {
+      const { width, height, theme, suit, rank, joker } = props
+      if (joker && (suit !== '' || rank !== 0))
+        throw new Error('`joker` can\'t have `rank` or `suit`')
+      if (rank < 0 || 13 < rank)
+        throw new Error('`rank` is invalid value')
+      if (width < 0 || height < 0)
+        throw new Error('`width` and `height` can\'t be negative value')
+      if (width > 0 && height > 0)
+        throw new Error('both `width` and `height` can\'t be inputted as props')
+    }
+    validate()
 
     const dh: number = 178 // default height
     const dw: number = 116 // default width
     const cardStyle = computed<any>(() => {
+      const { width, height } = props
       if (width === 0 && height === 0)
         return { width: `${dw}px`, height: `${dh}px`, fontSize: '100px' }
       if (width === 0 && height > 0)
-        return { width: `${dw * height / dh}px`, height: `${height}px`, fontSize: `${100 * height / db}px` }
+        return { width: `${dw * height / dh}px`, height: `${height}px`, fontSize: `${100 * height / dh}px` }
       if (width > 0 && height === 0)
         return { width: `${width}px`, height: `${dh * width / dw}px`, fontSize: `${100 * width / dw}px` }
       return {}
