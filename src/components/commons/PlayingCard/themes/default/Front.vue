@@ -112,7 +112,7 @@ export default defineComponent({
     bottom: 0
     z-index: -1
     backface-visibility: hidden
-    font-family: 'Impact'
+    font-family: 'arial'
     background-color: white
     border: 1px solid #999
     border-radius: 4%
@@ -130,7 +130,7 @@ export default defineComponent({
     height: 10%
     line-height: 100%
     padding-top: 5%
-    font-size: 16%
+    font-size: 24%
     &.-top
       left: 0
       top: 0
